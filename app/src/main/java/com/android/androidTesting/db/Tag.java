@@ -5,13 +5,10 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Note {
+public class Tag {
     @PrimaryKey(autoGenerate = true)
-    public int nid;
+    public int tid;
 
-    @ColumnInfo(name = "date")
-    public Long date;
-
-    @ColumnInfo(name = "description")
-    public String description;
+    @ColumnInfo(name = "name")
+    public String name;
 }

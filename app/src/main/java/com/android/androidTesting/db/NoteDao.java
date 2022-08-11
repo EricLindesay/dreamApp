@@ -13,6 +13,9 @@ public interface NoteDao {
     @Query("SELECT * FROM note ORDER BY date DESC")
     List<Note> getAllNotes();
 
+    @Query("SELECT * FROM note WHERE nid == :noteid LIMIT 1")
+    Note getNoteById(int noteid);
+
     @Insert
     void insertNote(Note... notes);
 

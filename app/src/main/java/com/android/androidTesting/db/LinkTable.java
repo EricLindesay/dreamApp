@@ -5,13 +5,13 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Note {
+public class LinkTable {
     @PrimaryKey(autoGenerate = true)
+    public int lid;
+
+    @ColumnInfo(name = "nid")
     public int nid;
 
-    @ColumnInfo(name = "date")
-    public Long date;
-
-    @ColumnInfo(name = "description")
-    public String description;
+    @ColumnInfo(name = "tid")
+    public int tid;
 }

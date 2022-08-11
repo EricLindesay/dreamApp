@@ -10,6 +10,7 @@ import java.util.Date;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.DatePicker;
 import android.view.View;
 import android.widget.Button;
@@ -101,14 +102,16 @@ public class AddNewNoteActivity extends AppCompatActivity {
             date_date = format.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
-            date_date = new Date(0L);
+            date_date = new Date();
         }
 
         Note note = new Note();
         note.date = date_date.getTime();
         note.description = description.trim();
-        db.noteDao().insertNote(note);
 
+        if (!note.description.isEmpty() && note.date != 0) {
+            db.noteDao().insertNote(note);
+        }
         finish();
 
     }

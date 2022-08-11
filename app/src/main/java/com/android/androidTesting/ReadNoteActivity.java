@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class ReadNoteActivity extends AppCompatActivity {
 
@@ -27,11 +28,20 @@ public class ReadNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_note);
 
-        // display the note
+        // get the textviews to display on
         TextView dateOutput = findViewById(R.id.dateOutput);
         TextView descriptionOutput = findViewById(R.id.descriptionOutput);
+        // get the note's id
+        Bundle extras = getIntent().getExtras();
+        int noteid = extras.getInt("noteid");
+        // get the note
+        AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
+        Note note =  db.noteDao().getNoteById(noteid);
 
-        // need some way of finding out which note was clicked
+        // print the note on the screen
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        dateOutput.setText(df.format(new Date(note.date)));
+        descriptionOutput.setText(note.description);
 
         Button returnButton =  findViewById(R.id.returnButton);
         returnButton.setOnClickListener(new View.OnClickListener() {

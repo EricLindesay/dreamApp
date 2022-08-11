@@ -2,6 +2,7 @@ package com.android.androidTesting;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,20 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
     public void onBindViewHolder(@NonNull NoteListAdapter.MyViewHolder holder, int position) {
         holder.tvDate.setText(millis_to_string(this.noteList.get(position).date));
         holder.tvDescription.setText(this.noteList.get(position).description);
+
+        final int noteid = this.noteList.get(position).nid;
+        holder.tvDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                main.clickedNote(noteid);
+            }
+        });
+        holder.tvDescription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                main.clickedNote(noteid);
+            }
+        });
     }
 
     @Override
@@ -59,7 +74,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
         return  this.noteList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView tvDate;
         TextView tvDescription;
 
@@ -67,12 +82,6 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
             super(view);
             tvDate = view.findViewById(R.id.dateInput);
             tvDescription = view.findViewById(R.id.descriptionInput);
-        }
-
-        @Override
-        public void onClick(View view) {
-            main.clickedNote();
-            //startActivityForResult(new Intent(MainActivity.class, AddNewNoteActivity.class), 100);
         }
     }
 }

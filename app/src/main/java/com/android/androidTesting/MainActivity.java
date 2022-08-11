@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         initRecyclerView();
 
         loadUserList();
+        Log.w("Debugging", "User List loaded");
     }
 
     private void initRecyclerView() {
@@ -65,8 +67,10 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void clickedNote() {
-        System.out.println("Hello");
-        startActivityForResult(new Intent(MainActivity.this, AddNewNoteActivity.class), 100);
+    public void clickedNote(int noteid) {
+        Log.w("Debugging", "Clicked Note");
+        Intent intent = new Intent(MainActivity.this, ReadNoteActivity.class);
+        intent.putExtra("noteid", noteid);
+        startActivityForResult(intent, 100);
     }
 }
