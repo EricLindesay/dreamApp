@@ -7,11 +7,12 @@
     tools:context=".AddNewNoteActivity">
 
 
-    <EditText
-        android:id="@+id/dateInput"
+    <TextView
+        android:id="@+id/dateOutput"
         android:layout_width="280dp"
         android:layout_height="40dp"
         android:layout_margin="10dp"
+        android:layout_marginStart="8dp"
         android:clickable="false"
         android:cursorVisible="false"
         android:focusable="false"
@@ -19,12 +20,13 @@
         android:hint="Enter date"
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.001" />
 
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/descriptionInput"
+    <TextView
+        android:id="@+id/descriptionOutput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -32,27 +34,15 @@
         android:minHeight="48dp"
         app:layout_constraintStart_toStartOf="parent"
 
-        app:layout_constraintTop_toBottomOf="@+id/dateInput" />
-
-    <Button android:id="@+id/saveButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="Save"
-        android:textAllCaps="false"
-
-        />
+        app:layout_constraintTop_toBottomOf="@+id/dateOutput" />
 
     <Button
-        android:id="@+id/todayButton"
-        android:layout_width="113dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
-        android:text="Today"
-        app:layout_constraintBottom_toTopOf="@+id/descriptionInput"
-        app:layout_constraintStart_toEndOf="@+id/dateInput"
-        app:layout_constraintTop_toTopOf="@+id/dateInput" />
+        android:id="@+id/returnButton"
+        android:layout_width="399dp"
+        android:layout_height="56dp"
+        android:text="Return"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

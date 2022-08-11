@@ -10,7 +10,7 @@ import java.util.List;
 @Dao
 public interface NoteDao {
 
-    @Query("SELECT * FROM note")
+    @Query("SELECT * FROM note ORDER BY date DESC")
     List<Note> getAllNotes();
 
     @Insert

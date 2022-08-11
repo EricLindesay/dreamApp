@@ -11,7 +11,7 @@ public class Note {
     public int nid;
 
     @ColumnInfo(name = "date")
-    public String date;
+    public Long date;
 
     @ColumnInfo(name = "description")
     public String description;
