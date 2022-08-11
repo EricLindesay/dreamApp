@@ -1,8 +1,6 @@
 package com.android.androidTesting;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +35,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
     @NonNull
     @Override
     public NoteListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       View view = LayoutInflater.from(context).inflate(R.layout.recycler_row, parent, false);
+       View view = LayoutInflater.from(context).inflate(R.layout.main_menu_row, parent, false);
 
        return new MyViewHolder(view);
     }
