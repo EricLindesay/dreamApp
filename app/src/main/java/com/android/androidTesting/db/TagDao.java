@@ -16,6 +16,9 @@ public interface TagDao {
     @Query("SELECT * FROM tag WHERE tid == :tagid LIMIT 1")
     Tag getTagById(String tagid);
 
+    @Query("SELECT * FROM tag WHERE tid LIKE :tagname ORDER BY tid ASC")
+    List<Tag> getTagsByName(String tagname);
+
     @Insert
     void insertTag(Tag... tags);
 

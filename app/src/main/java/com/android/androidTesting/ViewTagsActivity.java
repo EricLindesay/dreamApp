@@ -8,7 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
 import com.android.androidTesting.adapters.NoteListAdapter;
 import com.android.androidTesting.adapters.TagListAdapter;
@@ -26,10 +30,25 @@ public class ViewTagsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_tags_menu);
 
-        initRecyclerView();
+        final EditText searchBar = findViewById(R.id.searchTag);
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                return;
+            }
 
-        loadUserList();
-        Log.w("Debugging", "User List loaded");
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                return;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                loadTagList(searchBar.getText().toString());
+            }
+        });
+        initRecyclerView();
+        loadTagList();
     }
 
     private void initRecyclerView() {
@@ -43,16 +62,24 @@ public class ViewTagsActivity extends AppCompatActivity {
 
     }
 
-    private void loadUserList() {
+    private void loadTagList() {
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
         List<Tag> tagList =  db.tagDao().getAllTags();
+        tagListAdapter.setTagList(tagList);
+    }
+
+    private void loadTagList(String tagname) {
+        AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
+        List<Tag> tagList;
+        if (tagname.isEmpty()) tagList = db.tagDao().getAllTags();
+        else tagList = db.tagDao().getTagsByName("%"+tagname+"%");
         tagListAdapter.setTagList(tagList);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == 100) {
-            loadUserList();
+            loadTagList();
         }
 
         super.onActivityResult(requestCode, resultCode, data);
