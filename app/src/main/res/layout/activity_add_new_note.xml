@@ -27,7 +27,7 @@
     <EditText
         android:id="@+id/dateInput"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_margin="10dp"
         android:layout_marginStart="8dp"
         android:clickable="false"
@@ -36,8 +36,8 @@
         android:focusableInTouchMode="false"
         android:hint="Enter date"
         android:minHeight="48dp"
-        android:textColorHint="@color/darkModeTextHint"
         android:textColor="@color/darkModeText"
+        android:textColorHint="@color/darkModeTextHint"
         app:layout_constraintBottom_toBottomOf="parent"
 
         app:layout_constraintEnd_toStartOf="@+id/todayButton"
@@ -50,9 +50,11 @@
         android:layout_width="113dp"
         android:layout_height="48dp"
         android:text="Today"
+        android:textAllCaps="false"
         android:textColor="@color/darkModeButtonText"
+        app:layout_constraintBottom_toBottomOf="@+id/dateInput"
         app:layout_constraintEnd_toEndOf="@+id/descriptionInput"
-        tools:layout_editor_absoluteY="10dp" />
+        app:layout_constraintTop_toTopOf="@+id/dateInput" />
 
     <Button
         android:id="@+id/saveButton"
@@ -62,6 +64,16 @@
         android:textAllCaps="false"
         android:textColor="@color/darkModeButtonText"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/tagsButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Tags"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/saveButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

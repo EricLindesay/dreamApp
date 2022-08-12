@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.IllegalFormatWidthException;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.DatePicker;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.android.androidTesting.db.AppDatabase;
 import com.android.androidTesting.db.Note;
+import com.android.androidTesting.db.Tag;
 
 public class AddNewNoteActivity extends AppCompatActivity {
 
@@ -29,7 +31,6 @@ public class AddNewNoteActivity extends AppCompatActivity {
 
         final TextView dateInput =  findViewById(R.id.dateInput);
         final TextView descriptionInput =  findViewById(R.id.descriptionInput);
-
 
         // on below line we are adding click listener
         // for our pick date button
@@ -92,6 +93,14 @@ public class AddNewNoteActivity extends AppCompatActivity {
                 saveNewNote(dateInput.getText().toString(), descriptionInput.getText().toString());
             }
         });
+
+        Button tagButton = findViewById(R.id.tagsButton);
+        tagButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openTagList();
+            }
+        });
     }
 
     private void saveNewNote(String date, String description) {
@@ -110,5 +119,10 @@ public class AddNewNoteActivity extends AppCompatActivity {
         }
         finish();
 
+    }
+
+    private void openTagList() {
+        Intent intent = new Intent(AddNewNoteActivity.this, ViewTagsActivity.class);
+        startActivityForResult(intent, 100);
     }
 }

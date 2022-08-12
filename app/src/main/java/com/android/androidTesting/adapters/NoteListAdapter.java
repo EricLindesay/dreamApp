@@ -1,4 +1,4 @@
-package com.android.androidTesting;
+package com.android.androidTesting.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import androidx.annotation.NonNull;
 
+import com.android.androidTesting.MainActivity;
+import com.android.androidTesting.R;
 import com.android.androidTesting.db.Note;
 
 import java.text.DateFormat;

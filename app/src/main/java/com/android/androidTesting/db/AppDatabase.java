@@ -10,9 +10,10 @@ import androidx.room.RoomDatabase;
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract NoteDao noteDao();
+    public abstract TagDao tagDao();
 
     private static AppDatabase INSTANCE;
-    private static final String dbName = "note_database_test5";
+    private static final String dbName = "note_database_test6";
 
     public static AppDatabase getDbInstance(Context context) {
         if(INSTANCE == null) {

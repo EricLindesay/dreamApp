@@ -13,5 +13,5 @@ public class LinkTable {
     public int nid;
 
     @ColumnInfo(name = "tid")
-    public int tid;
+    public String tid;
 }
