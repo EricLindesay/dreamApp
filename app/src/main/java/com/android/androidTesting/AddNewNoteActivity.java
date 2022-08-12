@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.IllegalFormatWidthException;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -96,18 +97,13 @@ public class AddNewNoteActivity extends AppCompatActivity {
     private void saveNewNote(String date, String description) {
         AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
 
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date_date;
-        try {
-            date_date = format.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            date_date = new Date();
-        }
-
         Note note = new Note();
-        note.date = date_date.getTime();
-        note.description = description.trim();
+        note.date = FormatNote.formatDate(date);
+        try {
+            note.description = FormatNote.formatDescription(description);
+        } catch (IllegalFormatWidthException e) {
+            finish();
+        }
 
         if (!note.description.isEmpty() && note.date != 0) {
             db.noteDao().insertNote(note);
