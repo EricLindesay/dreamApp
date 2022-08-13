@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name="com.android.androidTesting.AddNewNoteActivity"></activity>
         <activity android:name="com.android.androidTesting.ReadNoteActivity"></activity>
-        <activity android:name="com.android.androidTesting.ViewTagsActivity"></activity>
+        <activity android:name="com.android.androidTesting.AddTagsActivity"></activity>
         <activity android:name="com.android.androidTesting.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

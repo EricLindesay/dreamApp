@@ -61,6 +61,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/Tags"
+        android:layout_width="399dp"
+        android:layout_height="56dp"
+        android:text="Tags"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/returnButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ImageView
         android:id="@+id/editButton"
         android:layout_width="42dp"

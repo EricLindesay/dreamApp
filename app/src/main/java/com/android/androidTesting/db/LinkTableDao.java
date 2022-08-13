@@ -13,8 +13,11 @@ public interface LinkTableDao {
     @Query("SELECT * FROM LinkTable")
     List<LinkTable> getAllLinks();
 
-    @Query("SELECT * FROM linktable WHERE lid == :linkid LIMIT 1")
-    Note getLinkById(int linkid);
+    @Query("SELECT nid FROM LinkTable WHERE tid == :tagID")
+    List<Integer> getAllNotesWithTag(String tagID);
+
+    @Query("SELECT tid FROM LinkTable WHERE nid == :noteID")
+    List<String> getAllTagsForNote(int noteID);
 
     @Insert
     void insertLink(LinkTable... links);

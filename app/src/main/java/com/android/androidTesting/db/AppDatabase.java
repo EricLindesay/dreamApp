@@ -11,9 +11,10 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract NoteDao noteDao();
     public abstract TagDao tagDao();
+    public abstract LinkTableDao linkTableDao();
 
     private static AppDatabase INSTANCE;
-    private static final String dbName = "note_database_test6";
+    private static final String dbName = "note_database_test7";
 
     public static AppDatabase getDbInstance(Context context) {
         if(INSTANCE == null) {

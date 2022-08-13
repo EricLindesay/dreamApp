@@ -1,6 +1,7 @@
 package com.android.androidTesting;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -101,8 +102,28 @@ public class ReadNoteActivity extends AppCompatActivity {
         }
         });
 
-        final Button returnButton =  findViewById(R.id.returnButton);
         final ImageView editButton = findViewById(R.id.editButton);
+        final Button returnButton =  findViewById(R.id.returnButton);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editable = true;
+                // Set the buttons
+                editButton.setVisibility(View.GONE);
+                returnButton.setText("Save");
+
+                // Make the EVs unclickable and unfocusable
+                setClicks(dateEV, true);
+                setClicks(descriptionEV, true);
+                setFocuses(descriptionEV, true);
+
+                // Hide the keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(dateEV.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(descriptionEV.getWindowToken(), 0);
+            }
+        });
+
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,25 +154,16 @@ public class ReadNoteActivity extends AppCompatActivity {
             }
         });
 
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                editable = true;
-                // Set the buttons
-                editButton.setVisibility(View.GONE);
-                returnButton.setText("Save");
-
-                // Make the EVs unclickable and unfocusable
-                setClicks(dateEV, true);
-                setClicks(descriptionEV, true);
-                setFocuses(descriptionEV, true);
-
-                // Hide the keyboard
-                InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(dateEV.getWindowToken(), 0);
-                imm.hideSoftInputFromWindow(descriptionEV.getWindowToken(), 0);
-            }
-        });
+        Log.d("Eric", "before tags button");
+        final Button tagsButton = findViewById(R.id.tagsButton);
+        Log.d("Eric", "after tags button");
+//        tagsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(ReadNoteActivity.this, AddTagsActivity.class);
+//                startActivityForResult(intent, 100);
+//            }
+//        });
     }
 
     void setFocuses(EditText et, boolean mode) {

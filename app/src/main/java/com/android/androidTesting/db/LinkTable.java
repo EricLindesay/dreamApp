@@ -1,17 +1,17 @@
 package com.android.androidTesting.db;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(primaryKeys = {"nid","tid"})
 public class LinkTable {
-    @PrimaryKey(autoGenerate = true)
-    public int lid;
-
+    @NonNull
     @ColumnInfo(name = "nid")
     public int nid;
 
+    @NonNull
     @ColumnInfo(name = "tid")
     public String tid;
 }

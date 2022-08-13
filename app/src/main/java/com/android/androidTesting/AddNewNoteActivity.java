@@ -3,8 +3,8 @@ package com.android.androidTesting;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.IllegalFormatWidthException;
@@ -12,13 +12,13 @@ import java.util.IllegalFormatWidthException;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.DatePicker;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.androidTesting.db.AppDatabase;
+import com.android.androidTesting.db.LinkTable;
 import com.android.androidTesting.db.Note;
 import com.android.androidTesting.db.Tag;
 
@@ -103,6 +103,11 @@ public class AddNewNoteActivity extends AppCompatActivity {
         });
     }
 
+    private void openTagList() {
+        Intent intent = new Intent(AddNewNoteActivity.this, AddTagsActivity.class);
+        startActivityForResult(intent, 100);
+    }
+
     private void saveNewNote(String date, String description) {
         AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
 
@@ -115,14 +120,24 @@ public class AddNewNoteActivity extends AppCompatActivity {
         }
 
         if (!note.description.isEmpty() && note.date != 0) {
-            db.noteDao().insertNote(note);
-        }
-        finish();
+            int nid = (int) db.noteDao().insertNote(note);
 
+            saveNoteTags(nid);  // add the note's tag in the link table
+        }
+
+        finish();
     }
 
-    private void openTagList() {
-        Intent intent = new Intent(AddNewNoteActivity.this, ViewTagsActivity.class);
-        startActivityForResult(intent, 100);
+    private void saveNoteTags(int nid) {
+        AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
+        ArrayList<String> tagList = TagList.selectedTags();
+        for (String tag : tagList) {
+            LinkTable lt = new LinkTable();
+            lt.nid = nid;
+            lt.tid = tag;
+            db.linkTableDao().insertLink(lt);
+        }
+
+        TagList.clear();
     }
 }

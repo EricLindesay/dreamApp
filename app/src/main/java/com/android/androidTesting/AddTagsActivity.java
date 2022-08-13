@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,17 +21,22 @@ import com.android.androidTesting.db.AppDatabase;
 import com.android.androidTesting.db.Note;
 import com.android.androidTesting.db.Tag;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ViewTagsActivity extends AppCompatActivity {
+public class AddTagsActivity extends AppCompatActivity {
     private TagListAdapter tagListAdapter;
+    private ArrayList<Tag> tags;
+    RecyclerView recyclerView;
+    TagList allTagList = new TagList();
+    EditText searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_tags_menu);
 
-        final EditText searchBar = findViewById(R.id.searchTag);
+        searchBar = findViewById(R.id.searchTag);
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -47,25 +53,26 @@ public class ViewTagsActivity extends AppCompatActivity {
                 loadTagList(searchBar.getText().toString());
             }
         });
-        initRecyclerView();
         loadTagList();
+        initRecyclerView();
     }
 
     private void initRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.tagList);
+        recyclerView = findViewById(R.id.tagList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
-        tagListAdapter = new TagListAdapter(this);
+        tagListAdapter = new TagListAdapter(tags, this, allTagList);
         recyclerView.setAdapter(tagListAdapter);
-
     }
 
     private void loadTagList() {
+        Log.d("Recycle", "this opens exactly once");
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
-        List<Tag> tagList =  db.tagDao().getAllTags();
-        tagListAdapter.setTagList(tagList);
+        List<Tag> tagList = db.tagDao().getAllTags();
+        tags = new ArrayList<Tag>(tagList);
+        allTagList.initialiseTagList(tags);
     }
 
     private void loadTagList(String tagname) {
@@ -73,16 +80,9 @@ public class ViewTagsActivity extends AppCompatActivity {
         List<Tag> tagList;
         if (tagname.isEmpty()) tagList = db.tagDao().getAllTags();
         else tagList = db.tagDao().getTagsByName("%"+tagname+"%");
-        tagListAdapter.setTagList(tagList);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == 100) {
-            loadTagList();
-        }
-
-        super.onActivityResult(requestCode, resultCode, data);
+        tags = new ArrayList<Tag>(tagList);
+        tagListAdapter = new TagListAdapter(tags, this, allTagList);
+        recyclerView.setAdapter(tagListAdapter);
     }
 
     private void createTag(String tagName) {
@@ -91,5 +91,17 @@ public class ViewTagsActivity extends AppCompatActivity {
         AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
 
         db.tagDao().insertTag(tag);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // if there is stuff in the search box, clear it.
+        // otherwise, finish.
+        String contents = searchBar.getText().toString();
+        if (contents.isEmpty()) {
+            finish();
+        } else {
+            searchBar.setText("");
+        }
     }
 }

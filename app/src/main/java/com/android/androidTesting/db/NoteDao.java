@@ -18,7 +18,7 @@ public interface NoteDao {
     Note getNoteById(int noteid);
 
     @Insert
-    void insertNote(Note... notes);
+    long insertNote(Note note);
 
     @Delete
     void delete(Note note);
