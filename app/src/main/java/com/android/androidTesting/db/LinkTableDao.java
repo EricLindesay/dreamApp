@@ -24,6 +24,9 @@ public interface LinkTableDao {
     @Insert(onConflict=IGNORE)
     void insertLink(LinkTable... links);
 
+    @Query("DELETE FROM linktable WHERE nid == :noteID")
+    void removeLinksToNote(int noteID);
+
     @Delete
     void delete(LinkTable link);
 }

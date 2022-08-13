@@ -1,5 +1,7 @@
 package com.android.androidTesting.db;
 
+import static androidx.room.OnConflictStrategy.IGNORE;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -19,8 +21,8 @@ public interface TagDao {
     @Query("SELECT * FROM tag WHERE tid LIKE :tagname ORDER BY tid ASC")
     List<Tag> getTagsByName(String tagname);
 
-    @Insert
-    void insertTag(Tag... tags);
+    @Insert(onConflict=IGNORE)
+    void insertTag(Tag tag);
 
     @Delete
     void delete(Tag tag);

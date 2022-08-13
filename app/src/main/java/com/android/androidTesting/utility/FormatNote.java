@@ -1,4 +1,4 @@
-package com.android.androidTesting;
+package com.android.androidTesting.utility;
 
 import java.text.DateFormat;
 import java.text.ParseException;

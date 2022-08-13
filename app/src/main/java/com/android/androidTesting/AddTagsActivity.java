@@ -1,26 +1,22 @@
 package com.android.androidTesting;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.androidTesting.adapters.NoteListAdapter;
+import com.android.androidTesting.adapters.TagList;
 import com.android.androidTesting.adapters.TagListAdapter;
 import com.android.androidTesting.db.AppDatabase;
-import com.android.androidTesting.db.LinkTable;
-import com.android.androidTesting.db.Note;
 import com.android.androidTesting.db.Tag;
 
 import java.util.ArrayList;
@@ -65,17 +61,31 @@ public class AddTagsActivity extends AppCompatActivity {
         loadTagList();
         initRecyclerView();
 
-        addTagTV = findViewById(R.id.addTag);  // starts as "GONE"
+        addTagTV = findViewById(R.id.addTag);  // starts as "GONE
+        addTagTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (searchBar.getText().toString().isEmpty()) {
+                    // don't create an empty tag
+                    // display an error message
+                } else {
+                    // create new tag and add it
+                    createTag(searchBar.getText().toString());
+                    loadTagList(searchBar.getText().toString());
+                    changeAddTagVisibility();
+                }
+            }
+        });
         changeAddTagVisibility();
     }
 
     void changeAddTagVisibility() {
-        if (tags.size() <= 0) {
+        if (tags.size() <= 0 || !searchBar.getText().toString().isEmpty()) {
             addTagTV.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
+            //recyclerView.setVisibility(View.GONE);
         } else {
             addTagTV.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
+            //recyclerView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -85,7 +95,7 @@ public class AddTagsActivity extends AppCompatActivity {
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
-        tagListAdapter = new TagListAdapter(tags, this, allTagList);
+        tagListAdapter = new TagListAdapter(tags, this, allTagList, this);
         recyclerView.setAdapter(tagListAdapter);
     }
 
@@ -109,7 +119,7 @@ public class AddTagsActivity extends AppCompatActivity {
         if (tagname.isEmpty()) tagList = db.tagDao().getAllTags();
         else tagList = db.tagDao().getTagsByName("%"+tagname+"%");
         tags = new ArrayList<Tag>(tagList);
-        tagListAdapter = new TagListAdapter(tags, this, allTagList);
+        tagListAdapter = new TagListAdapter(tags, this, allTagList, this);
         recyclerView.setAdapter(tagListAdapter);
     }
 
@@ -119,6 +129,20 @@ public class AddTagsActivity extends AppCompatActivity {
         AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
 
         db.tagDao().insertTag(tag);
+
+        // Add the tag to the list of tags
+        allTagList.addTag(tag);
+    }
+
+    public void deleteTag(Tag tag) {
+        AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
+        db.tagDao().delete(tag);
+        allTagList.removeTag(tag);
+    }
+
+    public void refreshTagList() {
+        loadTagList(searchBar.getText().toString());
+        changeAddTagVisibility();
     }
 
     @Override

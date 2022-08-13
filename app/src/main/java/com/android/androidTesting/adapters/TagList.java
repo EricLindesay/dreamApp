@@ -1,4 +1,4 @@
-package com.android.androidTesting;
+package com.android.androidTesting.adapters;
 
 import android.util.Log;
 
@@ -34,6 +34,17 @@ public class TagList {
                              // it should be default be true for that note
     }
 
+    public void removeTag(Tag tag) {
+        int i;
+        for (i=0; i<allTags.size(); i++) {
+            if (allTags.get(i).tid.equals(tag.tid)) {
+                break;
+            }
+        }
+        allTags.remove(i);
+        selected.remove(i);
+    }
+
     public boolean isSelected(Tag tag) {
         for (int i=0; i<allTags.size(); i++) {
             if (allTags.get(i).tid.equals(tag.tid)) {
@@ -53,8 +64,8 @@ public class TagList {
     }
 
     public static void clear() {
-        allTags.clear();
-        selected.clear();
+        if (allTags != null && !allTags.isEmpty()) allTags.clear();
+        if (selected != null && !selected.isEmpty()) selected.clear();
     }
 
     public static ArrayList<String> selectedTags() {

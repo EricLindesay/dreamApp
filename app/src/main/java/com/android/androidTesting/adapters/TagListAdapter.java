@@ -7,30 +7,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import androidx.annotation.NonNull;
 
+import com.android.androidTesting.AddTagsActivity;
 import com.android.androidTesting.MainActivity;
 import com.android.androidTesting.R;
-import com.android.androidTesting.TagList;
 import com.android.androidTesting.db.Tag;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.MyViewHolder> {
 
     private Context context;
-    private MainActivity main;
+    private AddTagsActivity addTagsActivity;
     private ArrayList<Tag> tagList;
     private TagList allTags;
 
-    public TagListAdapter(ArrayList<Tag> tagList, Context context, TagList allTags) {
+    public TagListAdapter(ArrayList<Tag> tagList, Context context, TagList allTags, AddTagsActivity addTagsActivity) {
         this.context = context;
         this.allTags = allTags;
         this.tagList = tagList;
+        this.addTagsActivity = addTagsActivity;
     }
 
     public void setTagList(ArrayList<Tag> tagList) {
@@ -61,6 +62,14 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.MyViewHo
                 allTags.setSelected(thisTag, isChecked);
             }
         });
+
+        holder.deleteTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addTagsActivity.deleteTag(thisTag);
+                addTagsActivity.refreshTagList();
+            }
+        });
     }
 
     @Override
@@ -70,11 +79,13 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.MyViewHo
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         CheckBox tagName;
+        ImageView deleteTag;
 
         public MyViewHolder(View view) {
             super(view);
             //this.setIsRecyclable(false);
             tagName = view.findViewById(R.id.checkBox);
+            deleteTag = view.findViewById(R.id.deleteTag);
         }
     }
 }
