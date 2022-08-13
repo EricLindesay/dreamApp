@@ -14,10 +14,12 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.androidTesting.adapters.NoteListAdapter;
 import com.android.androidTesting.adapters.TagListAdapter;
 import com.android.androidTesting.db.AppDatabase;
+import com.android.androidTesting.db.LinkTable;
 import com.android.androidTesting.db.Note;
 import com.android.androidTesting.db.Tag;
 
@@ -30,11 +32,16 @@ public class AddTagsActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     TagList allTagList = new TagList();
     EditText searchBar;
+    TextView addTagTV;
+    int noteid = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_tags_menu);
+
+        Bundle extras = getIntent().getExtras();
+        noteid = extras.getInt("noteid");
 
         searchBar = findViewById(R.id.searchTag);
         searchBar.addTextChangedListener(new TextWatcher() {
@@ -51,10 +58,25 @@ public class AddTagsActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 loadTagList(searchBar.getText().toString());
+                changeAddTagVisibility();
             }
         });
+
         loadTagList();
         initRecyclerView();
+
+        addTagTV = findViewById(R.id.addTag);  // starts as "GONE"
+        changeAddTagVisibility();
+    }
+
+    void changeAddTagVisibility() {
+        if (tags.size() <= 0) {
+            addTagTV.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            addTagTV.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initRecyclerView() {
@@ -72,7 +94,13 @@ public class AddTagsActivity extends AppCompatActivity {
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
         List<Tag> tagList = db.tagDao().getAllTags();
         tags = new ArrayList<Tag>(tagList);
-        allTagList.initialiseTagList(tags);
+        if (noteid == -1) {
+            allTagList.initialiseTagList(tags);
+        }
+        if (noteid != -1) {
+            List<String> stringList = db.linkTableDao().getAllTagsForNote(noteid);
+            allTagList.initialiseTagList(tags, new ArrayList<String>(stringList));
+        }
     }
 
     private void loadTagList(String tagname) {

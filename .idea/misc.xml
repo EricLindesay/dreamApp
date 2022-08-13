@@ -7,10 +7,11 @@
         <entry key="app/src/main/res/layout/activity_add_new_note.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_read_note.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/create_tag_row.xml" value="0.5" />
         <entry key="app/src/main/res/layout/main_menu_row.xml" value="0.25" />
         <entry key="app/src/main/res/layout/main_screen_row.xml" value="0.17325227963525835" />
         <entry key="app/src/main/res/layout/recycler_row.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/select_tags_menu.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/select_tags_menu.xml" value="0.5" />
         <entry key="app/src/main/res/layout/tag_row.xml" value="0.16" />
       </map>
     </option>

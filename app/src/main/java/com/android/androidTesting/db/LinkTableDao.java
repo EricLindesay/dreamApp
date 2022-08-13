@@ -1,5 +1,7 @@
 package com.android.androidTesting.db;
 
+import static androidx.room.OnConflictStrategy.IGNORE;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -19,7 +21,7 @@ public interface LinkTableDao {
     @Query("SELECT tid FROM LinkTable WHERE nid == :noteID")
     List<String> getAllTagsForNote(int noteID);
 
-    @Insert
+    @Insert(onConflict=IGNORE)
     void insertLink(LinkTable... links);
 
     @Delete

@@ -17,6 +17,17 @@ public class TagList {
         }
     }
 
+    public static void initialiseTagList(ArrayList<Tag> tagList, ArrayList<String> noteTags) {
+        allTags = tagList;
+        for (int i=0; i<tagList.size(); i++) {  // for a new note, they will all be false
+            if (noteTags.contains(allTags.get(i).tid)) {
+                selected.add(true);
+            } else {
+                selected.add(false);
+            }
+        }
+    }
+
     public void addTag(Tag tag) {
         allTags.add(tag);
         selected.add(true);  // if the user wants to create a new tag,

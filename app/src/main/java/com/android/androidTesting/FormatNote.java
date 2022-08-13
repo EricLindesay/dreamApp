@@ -26,4 +26,9 @@ public class FormatNote {
         }
         return date.getTime();
     }
+
+    public static String formatDate(Long date_to_format) {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(new Date(date_to_format));
+    }
 }

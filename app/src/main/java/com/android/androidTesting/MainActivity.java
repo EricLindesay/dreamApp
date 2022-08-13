@@ -32,13 +32,15 @@ public class MainActivity extends AppCompatActivity {
         addNewUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(MainActivity.this, AddNewNoteActivity.class), 100);
+                Intent intent = new Intent(MainActivity.this, AddNewNoteActivity.class);
+                intent.putExtra("noteid", -1);
+                startActivityForResult(intent, 100);
             }
         });
 
         initRecyclerView();
 
-        loadUserList();
+        loadNoteList();
         Log.w("Debugging", "User List loaded");
     }
 
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void loadUserList() {
+    private void loadNoteList() {
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
         List<Note> noteList =  db.noteDao().getAllNotes();
         noteListAdapter.setNoteList(noteList);
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == 100) {
-            loadUserList();
+            loadNoteList();
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void clickedNote(int noteid) {
         Log.w("Debugging", "Clicked Note");
-        Intent intent = new Intent(MainActivity.this, ReadNoteActivity.class);
+        Intent intent = new Intent(MainActivity.this, AddNewNoteActivity.class);
         intent.putExtra("noteid", noteid);
         startActivityForResult(intent, 100);
     }
