@@ -17,6 +17,9 @@ public interface NoteDao {
     @Query("SELECT * FROM note WHERE nid == :noteid LIMIT 1")
     Note getNoteById(int noteid);
 
+    @Query("SELECT * FROM note WHERE date >= :date1 AND date < :date2")
+    List<Note> getNotesBetweenDates(long date1, long date2);
+
     @Insert
     long insertNote(Note note);
 

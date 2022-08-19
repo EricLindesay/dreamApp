@@ -1,17 +1,26 @@
 package com.android.androidTesting.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import androidx.annotation.NonNull;
 
 import com.android.androidTesting.MainActivity;
 import com.android.androidTesting.R;
+import com.android.androidTesting.SearchActivity;
 import com.android.androidTesting.db.Note;
+import com.android.androidTesting.utility.CreateDialogBox;
+import com.android.androidTesting.utility.FormatNote;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,11 +31,17 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
 
     private Context context;
     private MainActivity main;
+    private SearchActivity search;
     private List<Note> noteList;
 
     public NoteListAdapter(Context context, MainActivity main) {
         this.context = context;
         this.main = main;
+    }
+
+    public NoteListAdapter(Context context, SearchActivity search) {
+        this.context = context;
+        this.search = search;
     }
 
     public void setNoteList(List<Note> noteList) {
@@ -42,29 +57,30 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
        return new MyViewHolder(view);
     }
 
-    public String millis_to_string(long millis) {
-        Date date = new Date(millis);
-
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        return format.format(date);
-    }
-
     @Override
     public void onBindViewHolder(@NonNull NoteListAdapter.MyViewHolder holder, int position) {
-        holder.tvDate.setText(millis_to_string(this.noteList.get(position).date));
-        holder.tvDescription.setText(this.noteList.get(position).description);
+        final Note note = this.noteList.get(position);
+        holder.tvDate.setText(FormatNote.formatDate(note.date));
+        holder.tvDescription.setText(note.description);
 
-        final int noteid = this.noteList.get(position).nid;
-        holder.tvDate.setOnClickListener(new View.OnClickListener() {
+        holder.row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                main.clickedNote(noteid);
+                if (main != null) {
+                    main.clickedNote(note.nid);
+                } else if (search != null) {
+                    search.clickedNote(note.nid);
+                }
             }
         });
-        holder.tvDescription.setOnClickListener(new View.OnClickListener() {
+
+        final DialogInterface.OnClickListener dialogClickListener = CreateDialogBox.create(() -> {main.deleteNote(note); return null;}, () -> {return null;} );
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                main.clickedNote(noteid);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Are you sure you want to delete note "+ FormatNote.formatDate(note.date)+"?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
             }
         });
     }
@@ -77,11 +93,22 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView tvDate;
         TextView tvDescription;
+        ImageView deleteButton;
+        ConstraintLayout row;
 
         public MyViewHolder(View view) {
             super(view);
             tvDate = view.findViewById(R.id.dateInput);
             tvDescription = view.findViewById(R.id.descriptionInput);
+            deleteButton = view.findViewById(R.id.deleteButton);
+            row = view.findViewById(R.id.noteRow);
         }
+
+        /*@Override
+        public void onClick(View view) {
+            Log.d("Eric", "Clicked");
+            final Note note = noteList.get(getAbsoluteAdapterPosition());
+            main.clickedNote(note.nid);
+        }*/
     }
 }

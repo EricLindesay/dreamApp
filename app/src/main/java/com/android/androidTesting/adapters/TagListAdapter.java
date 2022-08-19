@@ -1,7 +1,8 @@
 package com.android.androidTesting.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.util.Log;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,21 +14,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import androidx.annotation.NonNull;
 
-import com.android.androidTesting.AddTagsActivity;
-import com.android.androidTesting.MainActivity;
+import com.android.androidTesting.TagsActivity;
 import com.android.androidTesting.R;
+import com.android.androidTesting.db.AppDatabase;
 import com.android.androidTesting.db.Tag;
+import com.android.androidTesting.utility.CreateDialogBox;
 
 import java.util.ArrayList;
 
 public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.MyViewHolder> {
 
     private Context context;
-    private AddTagsActivity addTagsActivity;
+    private TagsActivity addTagsActivity;
     private ArrayList<Tag> tagList;
     private TagList allTags;
 
-    public TagListAdapter(ArrayList<Tag> tagList, Context context, TagList allTags, AddTagsActivity addTagsActivity) {
+    public TagListAdapter(ArrayList<Tag> tagList, Context context, TagList allTags, TagsActivity addTagsActivity) {
         this.context = context;
         this.allTags = allTags;
         this.tagList = tagList;
@@ -58,16 +60,21 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.MyViewHo
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //set your object's last status
-                Log.d("Recycle", "a button was clicked");
                 allTags.setSelected(thisTag, isChecked);
             }
         });
 
+        // get occurrences of tag
+        AppDatabase db = AppDatabase.getDbInstance(context);
+        final int occurrences = db.linkTableDao().tagOccurrences(thisTag.tid);
+
+        final DialogInterface.OnClickListener dialogClickListener = CreateDialogBox.create(() -> {addTagsActivity.deleteTag(thisTag); addTagsActivity.refreshTagList(); return null;}, () -> {return null;} );
         holder.deleteTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addTagsActivity.deleteTag(thisTag);
-                addTagsActivity.refreshTagList();
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Are you sure you want to delete \""+thisTag.tid+"\"?\nIt is used in "+occurrences+" notes").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
             }
         });
     }

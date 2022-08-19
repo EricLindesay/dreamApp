@@ -15,11 +15,12 @@
         android:ems="10"
         android:hint="Search..."
         android:inputType="textPersonName"
+        android:minHeight="48dp"
         android:textColor="@color/darkModeText"
         android:textColorHint="@color/darkModeTextHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tagList"
@@ -44,5 +45,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/searchTag"
         app:layout_constraintTop_toBottomOf="@+id/tagList" />
+
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/toolbar"
+        ></include>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,11 +8,7 @@ import java.util.IllegalFormatWidthException;
 
 public class FormatNote {
     public static String formatDescription(String description) throws IllegalFormatWidthException {
-        description = description.trim();
-        if (description.isEmpty()) {
-            throw new IllegalFormatWidthException(0);
-        }
-        return description;
+        return description.trim();
     }
 
     public static long formatDate(String date_to_format) {

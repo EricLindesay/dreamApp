@@ -7,8 +7,8 @@ import com.android.androidTesting.db.Tag;
 import java.util.ArrayList;
 
 public class TagList {
-    static ArrayList<Tag> allTags;
-    static ArrayList<Boolean> selected = new ArrayList<>();
+    public static ArrayList<Tag> allTags;
+    public static ArrayList<Boolean> selected = new ArrayList<>();
 
     public static void initialiseTagList(ArrayList<Tag> tagList) {
         allTags = tagList;
@@ -26,6 +26,14 @@ public class TagList {
                 selected.add(false);
             }
         }
+    }
+
+    public static ArrayList<String> tagsAsString() {
+        ArrayList<String> ret = new ArrayList<>();
+        for (Tag tag : allTags) {
+            ret.add(tag.tid);
+        }
+        return ret;
     }
 
     public void addTag(Tag tag) {

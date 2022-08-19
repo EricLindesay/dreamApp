@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto">
+        <!-- Search, should appear as action button -->
+<!--        <item android:id="@+id/action_search"-->
+<!--            android:icon="@android:drawable/ic_menu_search"-->
+<!--            android:title="T"-->
+<!--            android:showAsAction="always"-->
+<!--            />-->
+        <!-- Settings, should always be in the overflow -->
+        <!--<item android:id="@+id/action_settings"
+            android:title="@string/action_settings"
+            android:showAsAction="never" />
+        <item
+            android:id="@+id/app_bar_search"
+            android:icon="@android:drawable/ic_menu_search"
+            android:title="Search"
+            yourapp:actionViewClass="android.widget.SearchView" />
+        -->
+<!--            xmlns:tools="http://schemas.android.com/tools"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            tools:context=".MainActivity">-->
+<!---->
+<!--                <include-->
+<!--                    android:id="@+id/tool_bar"-->
+<!--                    layout="@layout/tool_bar" />-->
+<!---->
+<!--                <TextView-->
+<!--                    android:layout_below="@+id/tool_bar"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/TextDimTop"-->
+<!--                    android:text="@string/hello_world" />-->
+
+        <item
+            android:id="@+id/app_bar_search"
+            android:icon="@android:drawable/ic_menu_search"
+            android:title="Search"
+            yourapp:actionViewClass="android.widget.SearchView" />
+</menu>

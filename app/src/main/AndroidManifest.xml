@@ -5,12 +5,13 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="Test"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.android.androidTesting.AddNewNoteActivity"></activity>
-        <activity android:name="com.android.androidTesting.AddTagsActivity"></activity>
+        <activity android:name="com.android.androidTesting.NoteActivity"></activity>
+        <activity android:name="com.android.androidTesting.TagsActivity"></activity>
+        <activity android:name="com.android.androidTesting.SearchActivity"></activity>
         <activity android:name="com.android.androidTesting.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

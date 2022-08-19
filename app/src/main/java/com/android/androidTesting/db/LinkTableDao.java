@@ -25,8 +25,14 @@ public interface LinkTableDao {
     void insertLink(LinkTable... links);
 
     @Query("DELETE FROM linktable WHERE nid == :noteID")
-    void removeLinksToNote(int noteID);
+    void deleteLinksToNote(int noteID);
+
+    @Query("DELETE FROM linktable WHERE tid == :tagID")
+    void deleteLinksToTag(String tagID);
 
     @Delete
     void delete(LinkTable link);
+
+    @Query("SELECT COUNT(nid) FROM linktable WHERE tid == :tagID")
+    int tagOccurrences(String tagID);
 }

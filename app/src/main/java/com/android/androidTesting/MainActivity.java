@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.android.androidTesting.adapters.NoteListAdapter;
 import com.android.androidTesting.db.AppDatabase;
@@ -28,20 +29,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ImageView searchButton = findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivityForResult(intent, 100);
+            }
+        });
+
         Button addNewUserButton = findViewById(R.id.addNewNoteButton);
         addNewUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddNewNoteActivity.class);
+                Intent intent = new Intent(MainActivity.this, NoteActivity.class);
                 intent.putExtra("noteid", -1);
                 startActivityForResult(intent, 100);
             }
         });
 
         initRecyclerView();
-
         loadNoteList();
-        Log.w("Debugging", "User List loaded");
+        Log.d("Eric", "User List loaded");
     }
 
     private void initRecyclerView() {
@@ -72,8 +81,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void clickedNote(int noteid) {
         Log.w("Debugging", "Clicked Note");
-        Intent intent = new Intent(MainActivity.this, AddNewNoteActivity.class);
+        Intent intent = new Intent(MainActivity.this, NoteActivity.class);
         intent.putExtra("noteid", noteid);
         startActivityForResult(intent, 100);
+    }
+
+    public void deleteNote(Note note) {
+        AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
+        db.linkTableDao().deleteLinksToNote(note.nid);
+        db.noteDao().delete(note);
+        loadNoteList();
     }
 }

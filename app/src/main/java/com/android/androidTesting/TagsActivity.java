@@ -22,7 +22,7 @@ import com.android.androidTesting.db.Tag;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddTagsActivity extends AppCompatActivity {
+public class TagsActivity extends AppCompatActivity {
     private TagListAdapter tagListAdapter;
     private ArrayList<Tag> tags;
     RecyclerView recyclerView;
@@ -35,6 +35,14 @@ public class AddTagsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_tags_menu);
+
+        ImageView backButton = findViewById(R.id.toolbarBack);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         Bundle extras = getIntent().getExtras();
         noteid = extras.getInt("noteid");
@@ -58,7 +66,7 @@ public class AddTagsActivity extends AppCompatActivity {
             }
         });
 
-        loadTagList();
+        tags = TagList.allTags;
         initRecyclerView();
 
         addTagTV = findViewById(R.id.addTag);  // starts as "GONE
@@ -99,20 +107,6 @@ public class AddTagsActivity extends AppCompatActivity {
         recyclerView.setAdapter(tagListAdapter);
     }
 
-    private void loadTagList() {
-        Log.d("Recycle", "this opens exactly once");
-        AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
-        List<Tag> tagList = db.tagDao().getAllTags();
-        tags = new ArrayList<Tag>(tagList);
-        if (noteid == -1) {
-            allTagList.initialiseTagList(tags);
-        }
-        if (noteid != -1) {
-            List<String> stringList = db.linkTableDao().getAllTagsForNote(noteid);
-            allTagList.initialiseTagList(tags, new ArrayList<String>(stringList));
-        }
-    }
-
     private void loadTagList(String tagname) {
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
         List<Tag> tagList;
@@ -136,6 +130,7 @@ public class AddTagsActivity extends AppCompatActivity {
 
     public void deleteTag(Tag tag) {
         AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
+        db.linkTableDao().deleteLinksToTag(tag.tid);
         db.tagDao().delete(tag);
         allTagList.removeTag(tag);
     }
