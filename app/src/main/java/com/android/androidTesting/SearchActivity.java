@@ -25,10 +25,10 @@ import java.util.Date;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
-    EditText yearInput, monthInput, dayInput, searchInput;
+    EditText startDate, endDate, searchInput;
     NoteListAdapter noteListAdapter;
-    long fromDate = 0;
-    long toDate = 0;
+    long startDateLong = -1;
+    long endDateLong = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,58 +43,55 @@ public class SearchActivity extends AppCompatActivity {
             // go into the tags menu so they can select tags to search for
             // only show notes for those tags
 
-        yearInput = findViewById(R.id.yearInput);
-        monthInput = findViewById(R.id.monthInput);
-        dayInput = findViewById(R.id.dayInput);
-        yearInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { dateChanged(); }
-
-            @Override
-            public void afterTextChanged(Editable editable) {}
-        });
-        monthInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { dateChanged(); }
-
-            @Override
-            public void afterTextChanged(Editable editable) {}
-        });
-        dayInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { dateChanged(); }
-
-            @Override
-            public void afterTextChanged(Editable editable) {}
-        });
-
-
-        // Setup calendar
-        ImageView calendar = findViewById(R.id.calendarIcon);
-        calendar.setOnClickListener(new View.OnClickListener() {
+        startDate = findViewById(R.id.startDateInput);
+        startDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new CalendarClass(SearchActivity.this, yearInput, monthInput, dayInput);
+                new CalendarClass(SearchActivity.this, startDate);
+            }
+        });
+        startDate.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                startDateChanged(true);
+            }
+
+            @Override public void afterTextChanged(Editable editable) {}
+        });
+
+        endDate = findViewById(R.id.endDateInput);
+        endDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new CalendarClass(SearchActivity.this, endDate);
+            }
+        });
+        endDate.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                startDateChanged(false);
+            }
+
+            @Override public void afterTextChanged(Editable editable) {}
+        });
+
+        ImageView clearStartDate = findViewById(R.id.clearStartDate);
+        clearStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startDate.setText("");
             }
         });
 
-        // Setup date clear button
-        ImageView clearDate = findViewById(R.id.clearDate);
-        clearDate.setOnClickListener(new View.OnClickListener() {
+        ImageView clearEndDate = findViewById(R.id.clearEndDate);
+        clearEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                yearInput.setText("");
-                monthInput.setText("");
-                dayInput.setText("");
+                endDate.setText("");
             }
         });
 
@@ -117,10 +114,12 @@ public class SearchActivity extends AppCompatActivity {
     private void loadNoteList() {
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
         List<Note> noteList;
-        if (fromDate == 0 && toDate == 0)
+        if (startDateLong == -1 && endDateLong == -1)
             noteList = db.noteDao().getAllNotes();
+        else if (startDateLong != -1 && endDateLong == -1)
+            noteList = db.noteDao().getNotesBetweenDates(startDateLong);
         else
-            noteList = db.noteDao().getNotesBetweenDates(fromDate, toDate);
+            noteList = db.noteDao().getNotesBetweenDates(startDateLong, endDateLong);
         noteListAdapter.setNoteList(noteList);
     }
 
@@ -141,30 +140,13 @@ public class SearchActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    void dateChanged() {
-        String year = yearInput.getText().toString();
-        String month = monthInput.getText().toString();
-        String day = dayInput.getText().toString();
-        if (year.isEmpty() && month.isEmpty() && day.isEmpty()) fromDate = toDate = 0;
-        else {
-            // 0L = 1st Jan 1970
-            String firstDate = "";
-            String secondDate = "";
-
-            if (!year.isEmpty() && month.isEmpty() && day.isEmpty()) {
-                firstDate += "" + Integer.parseInt(year)+"-01-01";
-                secondDate += "" + (Integer.parseInt(year) + 1)+"-01-01";
-            } else if (!year.isEmpty() && !month.isEmpty() && day.isEmpty()) {
-                firstDate += "" + Integer.parseInt(year)+"-"+Integer.parseInt(month)+"-01";
-                secondDate += "" + Integer.parseInt(year)+"-"+(Integer.parseInt(month)+1)+"-01";
-            } else if (!year.isEmpty() && !month.isEmpty() && !day.isEmpty()) {
-                firstDate += "" + Integer.parseInt(year)+"-"+Integer.parseInt(month)+"-"+Integer.parseInt(day);
-                secondDate += "" + Integer.parseInt(year)+"-"+Integer.parseInt(month)+"-"+(Integer.parseInt(day)+1);
-            }
-            Log.d("Eric", "First: "+firstDate);
-            Log.d("Eric", "Second: "+secondDate);
-            fromDate = FormatNote.formatDate(firstDate);
-            toDate = FormatNote.formatDate(secondDate);
+    void startDateChanged(boolean start) {
+        if (start) {
+            if (startDate.getText().toString().isEmpty()) startDateLong = -1;
+            else startDateLong = FormatNote.formatDate(startDate.getText().toString());
+        } else {
+            if (endDate.getText().toString().isEmpty()) endDateLong = -1;
+            else endDateLong = FormatNote.formatDate(endDate.getText().toString());
         }
         loadNoteList();
     }

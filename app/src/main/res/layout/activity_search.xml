@@ -33,84 +33,75 @@
         android:inputType="textPersonName"
         android:textColor="@color/darkModeText"
         android:textColorHint="@color/darkModeTextHint"
-        app:layout_constraintStart_toStartOf="@+id/yearInput"
-        app:layout_constraintTop_toBottomOf="@+id/yearInput" />
-
-    <!-- Year Input -->
-    <!-- Text Size = 18sp -->
-    <EditText
-        android:id="@+id/yearInput"
-        android:layout_width="72sp"
-        android:layout_height="50dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="5dp"
-        android:ems="10"
-        android:hint="YYYY"
-        android:gravity="center"
-        android:inputType="date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startDateInput" />
+
+    <!-- Enter Start Date -->
+    <EditText
+        android:id="@+id/startDateInput"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="10dp"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="Enter start date"
+        android:minHeight="48dp"
         android:textColor="@color/darkModeText"
         android:textColorHint="@color/darkModeTextHint"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <!-- Month Input -->
+    <!-- Enter End Date -->
     <EditText
-        android:id="@+id/monthInput"
-        android:layout_width="40sp"
-        android:layout_height="50dp"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="MM"
-        android:inputType="date"
+        android:id="@+id/endDateInput"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_margin="10dp"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="Enter end date"
+        android:minHeight="48dp"
         android:textColor="@color/darkModeText"
-        android:textColorHint="@color/darkModeTextHint"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/yearInput"
-        app:layout_constraintStart_toEndOf="@+id/dashIgnore1"
-        app:layout_constraintTop_toTopOf="@+id/yearInput" />
 
-    <!-- Day Input -->
-    <EditText
-        android:id="@+id/dayInput"
-        android:layout_width="36sp"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:ems="10"
-        android:hint="DD"
-        android:inputType="date"
-        android:textColor="@color/darkModeText"
         android:textColorHint="@color/darkModeTextHint"
-        android:layout_marginLeft="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/monthInput"
-        app:layout_constraintStart_toEndOf="@+id/dashIgnore2"
-        app:layout_constraintTop_toTopOf="@+id/monthInput" />
-
-    <!-- Calendar Icon -->
-    <ImageView
-        android:id="@+id/calendarIcon"
-        android:layout_width="74dp"
-        android:layout_height="50dp"
-        app:layout_constraintEnd_toStartOf="@+id/clearDate"
-        app:layout_constraintStart_toEndOf="@+id/dayInput"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:srcCompat="@android:drawable/ic_menu_today" />
+        app:layout_constraintBottom_toBottomOf="@+id/startDateInput"
+        app:layout_constraintEnd_toStartOf="@id/clearEndDate"
+        app:layout_constraintTop_toTopOf="@+id/startDateInput" />
 
     <!-- Clear Date Button -->
+
+    <!-- Recycler for result -->
+
     <ImageView
-        android:id="@+id/clearDate"
+        android:id="@+id/clearStartDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:scaleX="1.4"
-        android:scaleY="1.4"
-        app:layout_constraintBottom_toBottomOf="@+id/calendarIcon"
-        app:layout_constraintStart_toEndOf="@+id/calendarIcon"
+        android:scaleX="1"
+        android:scaleY="1"
+        app:layout_constraintBottom_toTopOf="@+id/searchInput"
+        app:layout_constraintEnd_toStartOf="@+id/endDateInput"
+        app:layout_constraintStart_toEndOf="@+id/startDateInput"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <ImageView
+        android:id="@+id/clearEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:layout_marginRight="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/searchInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
-    <!-- Recycler for result -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
@@ -119,33 +110,9 @@
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchInput" />
-
-    <TextView
-        android:id="@+id/dashIgnore1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="-"
-        app:layout_constraintBottom_toBottomOf="@+id/yearInput"
-        app:layout_constraintEnd_toStartOf="@+id/monthInput"
-        app:layout_constraintStart_toEndOf="@+id/yearInput"
-        app:layout_constraintTop_toTopOf="@+id/yearInput"
-        android:layout_marginLeft="5dp"
-        android:textColor="@color/darkModeText"
-        />
-
-    <TextView
-        android:id="@+id/dashIgnore2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="-"
-        app:layout_constraintBottom_toBottomOf="@+id/monthInput"
-        app:layout_constraintEnd_toStartOf="@+id/dayInput"
-        app:layout_constraintStart_toEndOf="@+id/monthInput"
-        app:layout_constraintTop_toTopOf="@+id/monthInput"
-        android:layout_marginLeft="5dp"
-        android:textColor="@color/darkModeText"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/searchInput"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
