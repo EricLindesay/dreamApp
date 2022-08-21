@@ -14,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.sqlite.db.SimpleSQLiteQuery;
+import androidx.sqlite.db.SupportSQLiteProgram;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.android.androidTesting.adapters.NoteListAdapter;
 import com.android.androidTesting.db.AppDatabase;
@@ -21,6 +24,7 @@ import com.android.androidTesting.db.Note;
 import com.android.androidTesting.utility.CalendarClass;
 import com.android.androidTesting.utility.FormatNote;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +33,7 @@ public class SearchActivity extends AppCompatActivity {
     NoteListAdapter noteListAdapter;
     long startDateLong = -1;
     long endDateLong = -1;
+    String[] searchTerms = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,18 @@ public class SearchActivity extends AppCompatActivity {
         // if tags is pressed
             // go into the tags menu so they can select tags to search for
             // only show notes for those tags
+
+        searchInput = findViewById(R.id.searchInput);
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                searchTermChanged(searchInput.getText().toString());
+            }
+
+            @Override public void afterTextChanged(Editable editable) {}
+        });
 
         startDate = findViewById(R.id.startDateInput);
         startDate.setOnClickListener(new View.OnClickListener() {
@@ -113,16 +130,41 @@ public class SearchActivity extends AppCompatActivity {
 
     private void loadNoteList() {
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
-        List<Note> noteList;
-        if (startDateLong == -1 && endDateLong == -1)
-            noteList = db.noteDao().getAllNotes();
-        else if (startDateLong != -1 && endDateLong == -1)
-            noteList = db.noteDao().getNotesBetweenDates(startDateLong);
-        else
-            noteList = db.noteDao().getNotesBetweenDates(startDateLong, endDateLong);
+        StringBuilder query = new StringBuilder("SELECT * FROM note WHERE 1 == 1");
+        // filter for date
+        if (startDateLong == -1 && endDateLong == -1) {
+            // skip
+        }
+        else if (startDateLong != -1 && endDateLong == -1) {  // start date exists but end doesn't
+            query.append(" AND date >= "+startDateLong);
+        }
+        else {
+            query.append(" AND date BETWEEN "+startDateLong+" AND "+endDateLong);
+        }
+
+        // filter for search terms
+        if (searchTerms != null) {
+            for (String term : searchTerms) {
+                // really should make sure the input is clean but idc
+                query.append(" AND description LIKE '%"+term+"%'");
+            }
+        }
+
+        List<Note> noteList = db.noteDao().filterNotes(new SimpleSQLiteQuery(query.toString()));
         noteListAdapter.setNoteList(noteList);
     }
 
+    List<Note> commonValues(List<Note> list1, List<Note> list2) {
+        List<Note> ret = new ArrayList<>();
+        for (Note note1 : list1) {
+            for (Note note2 : list2) {
+                if (note1.nid == note2.nid) {
+                    ret.add(note1);
+                }
+            }
+        }
+        return ret;
+    }
 
     public void clickedNote(int noteid) {
         Log.w("Debugging", "Clicked Note");
@@ -147,6 +189,15 @@ public class SearchActivity extends AppCompatActivity {
         } else {
             if (endDate.getText().toString().isEmpty()) endDateLong = -1;
             else endDateLong = FormatNote.formatDate(endDate.getText().toString());
+        }
+        loadNoteList();
+    }
+
+    void searchTermChanged(String input) {
+        if (input.isEmpty()) {
+            searchTerms = null;
+        } else {
+            searchTerms = input.split(", ");
         }
         loadNoteList();
     }

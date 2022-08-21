@@ -4,7 +4,9 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.RawQuery;
 import androidx.room.Update;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import java.util.List;
 
@@ -22,6 +24,12 @@ public interface NoteDao {
 
     @Query("SELECT * FROM note WHERE date >= :date1")
     List<Note> getNotesBetweenDates(long date1);
+
+    @Query("SELECT * FROM note WHERE description LIKE :searchTerm")
+    List<Note> getNotesWithDescription(String searchTerm);
+
+    @RawQuery
+    List<Note> filterNotes(SupportSQLiteQuery query);
 
     @Insert
     long insertNote(Note note);
