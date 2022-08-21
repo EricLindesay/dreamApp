@@ -29,7 +29,7 @@ public class TagsActivity extends AppCompatActivity {
     TagList allTagList = new TagList();
     EditText searchBar;
     TextView addTagTV;
-    int noteid = 0;
+    int noteID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class TagsActivity extends AppCompatActivity {
         });
 
         Bundle extras = getIntent().getExtras();
-        noteid = extras.getInt("noteid");
+        noteID = extras.getInt("noteID");
 
         searchBar = findViewById(R.id.searchTag);
         searchBar.addTextChangedListener(new TextWatcher() {

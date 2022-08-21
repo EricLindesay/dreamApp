@@ -35,4 +35,16 @@ public interface LinkTableDao {
 
     @Query("SELECT COUNT(nid) FROM linktable WHERE tid == :tagID")
     int tagOccurrences(String tagID);
+
+    @Query("SELECT COUNT(*) FROM linktable WHERE tid IN (:tagsAsString)")
+    int getCount(List<String> tagsAsString);
+
+    @Query("SELECT * FROM linktable lt WHERE lt.tid IN (:tagsAsString)")
+    List<LinkTable> testCount(List<String> tagsAsString);
+
+    @Query("SELECT * FROM linktable WHERE tid in (:tagsAsString) GROUP BY nid HAVING COUNT(*) = :n")
+    List<LinkTable> having(List<String> tagsAsString, int n);
+
+    @Query("SELECT COUNT(*) FROM linktable WHERE tid in (:tagsAsString) GROUP BY nid HAVING COUNT(*) = :n")
+    int havingCount(List<String> tagsAsString, int n);
 }

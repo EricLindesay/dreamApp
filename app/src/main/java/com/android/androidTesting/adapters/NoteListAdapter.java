@@ -18,7 +18,9 @@ import androidx.annotation.NonNull;
 import com.android.androidTesting.MainActivity;
 import com.android.androidTesting.R;
 import com.android.androidTesting.SearchActivity;
+import com.android.androidTesting.db.AppDatabase;
 import com.android.androidTesting.db.Note;
+import com.android.androidTesting.db.Tag;
 import com.android.androidTesting.utility.CreateDialogBox;
 import com.android.androidTesting.utility.FormatNote;
 
@@ -63,6 +65,21 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
         holder.tvDate.setText(FormatNote.formatDate(note.date));
         holder.tvDescription.setText(note.description);
 
+        AppDatabase db = AppDatabase.getDbInstance(this.context);
+        List<String> tagList = db.linkTableDao().getAllTagsForNote(note.nid);
+        StringBuilder tagsString = new StringBuilder("tags: ");
+        int tagsBeforeDots = 6;
+        for (int i=0; i<tagsBeforeDots && i<tagList.size(); i++) {
+            String tag = tagList.get(i);
+            tagsString.append(tag+", ");
+        }
+        tagsString.deleteCharAt(tagsString.length()-1); // remove trailing ', '
+        tagsString.deleteCharAt(tagsString.length()-1);
+        if (tagList.size() > tagsBeforeDots) {
+            tagsString.append("...");
+        }
+        holder.tvTagList.setText(tagsString.toString());
+
         holder.row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,6 +112,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
         TextView tvDescription;
         ImageView deleteButton;
         ConstraintLayout row;
+        TextView tvTagList;
 
         public MyViewHolder(View view) {
             super(view);
@@ -102,13 +120,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
             tvDescription = view.findViewById(R.id.descriptionInput);
             deleteButton = view.findViewById(R.id.deleteButton);
             row = view.findViewById(R.id.noteRow);
+            tvTagList = view.findViewById(R.id.tags);
         }
-
-        /*@Override
-        public void onClick(View view) {
-            Log.d("Eric", "Clicked");
-            final Note note = noteList.get(getAbsoluteAdapterPosition());
-            main.clickedNote(note.nid);
-        }*/
     }
 }

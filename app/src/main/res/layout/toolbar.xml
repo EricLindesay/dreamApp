@@ -6,28 +6,30 @@
     android:layout_height="55dp"
     android:background="@color/darkModeBackground">
 
+    <!-- Back Button -->
     <ImageView
         android:id="@+id/toolbarBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="25dp"
         android:layout_marginTop="15dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="10dp"
-        android:scaleX="1.5"
-        android:scaleY="1.2"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="15dp"
+        android:scaleX="1.75"
+        android:scaleY="1.45"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/abc_vector_test" />
 
+    <!-- App Name Text -->
     <TextView
         android:id="@+id/toolbarText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginBottom="5dp"
-        android:text="TextView"
+        android:text="Dream Documentation"
         android:textColor="@color/darkModeText"
         android:textSize="28dp"
         android:textStyle="bold"
@@ -35,6 +37,7 @@
         app:layout_constraintStart_toEndOf="@+id/toolbarBack"
         app:layout_constraintTop_toTopOf="@+id/toolbarBack" />
 
+    <!-- Dividing Line -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

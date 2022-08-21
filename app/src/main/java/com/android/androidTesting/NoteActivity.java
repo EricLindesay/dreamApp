@@ -9,6 +9,9 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,14 +29,14 @@ import com.android.androidTesting.db.Tag;
 import com.android.androidTesting.utility.CalendarClass;
 import com.android.androidTesting.utility.CreateDialogBox;
 import com.android.androidTesting.utility.FormatNote;
+import com.google.android.material.snackbar.Snackbar;
 
 public class NoteActivity extends AppCompatActivity {
     TextView dateInput;
     TextView descriptionInput;
-    int noteid;
+    int noteID;
     String originalDate = "";
     String originalDescription = "";
-    boolean changedTags = false;
     ArrayList<String> originalTags = null;
     TagList allTagList = new TagList();
     // if they open the tag list, just say they changed tags
@@ -47,8 +50,8 @@ public class NoteActivity extends AppCompatActivity {
         descriptionInput =  findViewById(R.id.descriptionInput);
 
         Bundle extras = getIntent().getExtras();
-        noteid = extras.getInt("noteid");
-        if (noteid != -1) {
+        noteID = extras.getInt("noteID");
+        if (noteID != -1) {
             updateContent(dateInput, descriptionInput);
             originalDate = dateInput.getText().toString();
             originalDescription = descriptionInput.getText().toString();
@@ -95,8 +98,19 @@ public class NoteActivity extends AppCompatActivity {
         tagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changedTags = true;
                 openTagList();
+            }
+        });
+
+        ImageView copyButton = findViewById(R.id.copyButton);
+        copyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Dream", descriptionInput.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                Snackbar.make(view, "Text Copied!", Snackbar.LENGTH_SHORT)
+                                .setAction("Action", null).show();
             }
         });
     }
@@ -105,18 +119,18 @@ public class NoteActivity extends AppCompatActivity {
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
         List<Tag> tagList = db.tagDao().getAllTags();
         ArrayList<Tag> tags = new ArrayList<Tag>(tagList);
-        if (noteid == -1) {
+        if (noteID == -1) {
             allTagList.initialiseTagList(tags);
         }
-        if (noteid != -1) {
-            List<String> stringList = db.linkTableDao().getAllTagsForNote(noteid);
+        if (noteID != -1) {
+            List<String> stringList = db.linkTableDao().getAllTagsForNote(noteID);
             allTagList.initialiseTagList(tags, new ArrayList<String>(stringList));
         }
     }
 
     private void openTagList() {
         Intent intent = new Intent(NoteActivity.this, TagsActivity.class);
-        intent.putExtra("noteid", noteid);
+        intent.putExtra("noteID", noteID);
         startActivityForResult(intent, 100);
     }
 
@@ -135,11 +149,11 @@ public class NoteActivity extends AppCompatActivity {
         // the tags link table have onConflict ignore so we don't need to worry
         if (!note.description.isEmpty() && !date_is_empty) {
             int nid;
-            if (noteid == -1) {
+            if (noteID == -1) {
                 nid = (int) db.noteDao().insertNote(note);
             } else {
-                nid = noteid;
-                note.nid = noteid;
+                nid = noteID;
+                note.nid = noteID;
                 db.noteDao().update(note);
             }
 
@@ -218,13 +232,13 @@ public class NoteActivity extends AppCompatActivity {
 
     void updateContent(TextView date, TextView description) {
         AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
-        Note note = db.noteDao().getNoteById(noteid);
+        Note note = db.noteDao().getNoteById(noteID);
         date.setText(FormatNote.formatDate(note.date));
         description.setText(note.description);
     }
 
     private ArrayList<String> getTags() {
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
-        return new ArrayList<>(db.linkTableDao().getAllTagsForNote(noteid));
+        return new ArrayList<>(db.linkTableDao().getAllTagsForNote(noteID));
     }
 }

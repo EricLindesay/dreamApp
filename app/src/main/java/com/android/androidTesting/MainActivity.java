@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, NoteActivity.class);
-                intent.putExtra("noteid", -1);
+                intent.putExtra("noteID", -1);
                 startActivityForResult(intent, 100);
             }
         });
@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
         noteListAdapter = new NoteListAdapter(this, this);
         recyclerView.setAdapter(noteListAdapter);
-
     }
 
     private void loadNoteList() {
@@ -79,10 +78,10 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void clickedNote(int noteid) {
+    public void clickedNote(int noteID) {
         Log.w("Debugging", "Clicked Note");
         Intent intent = new Intent(MainActivity.this, NoteActivity.class);
-        intent.putExtra("noteid", noteid);
+        intent.putExtra("noteID", noteID);
         startActivityForResult(intent, 100);
     }
 

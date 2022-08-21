@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -19,8 +20,11 @@ import androidx.sqlite.db.SupportSQLiteProgram;
 import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.android.androidTesting.adapters.NoteListAdapter;
+import com.android.androidTesting.adapters.TagList;
 import com.android.androidTesting.db.AppDatabase;
+import com.android.androidTesting.db.LinkTable;
 import com.android.androidTesting.db.Note;
+import com.android.androidTesting.db.Tag;
 import com.android.androidTesting.utility.CalendarClass;
 import com.android.androidTesting.utility.FormatNote;
 
@@ -34,6 +38,7 @@ public class SearchActivity extends AppCompatActivity {
     long startDateLong = -1;
     long endDateLong = -1;
     String[] searchTerms = null;
+    TagList tagList = new TagList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +47,18 @@ public class SearchActivity extends AppCompatActivity {
 
         // if search bar has anything in it, only show notes with that phrase in the description
         // if the date has anything in it, only show notes with that date
-        // if the calendar is pressed, update the date text fields
         // if the X is pressed, clear the date fields
         // if tags is pressed
             // go into the tags menu so they can select tags to search for
             // only show notes for those tags
+
+        ImageView backButton = findViewById(R.id.toolbarBack);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exit();
+            }
+        });
 
         searchInput = findViewById(R.id.searchInput);
         searchInput.addTextChangedListener(new TextWatcher() {
@@ -112,6 +124,15 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+        loadTagList();
+        Button tagButton = findViewById(R.id.tagsButton);
+        tagButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openTagList();
+            }
+        });
+
         initRecyclerView();
         loadNoteList();
         Log.d("Eric", "Search screen loaded");
@@ -127,6 +148,19 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.setAdapter(noteListAdapter);
 
     }
+
+    private void openTagList() {
+        Intent intent = new Intent(SearchActivity.this, TagsActivity.class);
+        intent.putExtra("noteID", -1);
+        startActivityForResult(intent, 100);
+    }
+
+    private void loadTagList() {
+        AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
+        ArrayList<Tag> tags = new ArrayList<Tag>(db.tagDao().getAllTags());
+        tagList.initialiseTagList(tags);
+    }
+
 
     private void loadNoteList() {
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
@@ -150,26 +184,26 @@ public class SearchActivity extends AppCompatActivity {
             }
         }
 
+        // Filter tags
+        List<String> selectedTags = TagList.selectedTags();
+        if (!selectedTags.isEmpty()) {
+            StringBuilder tags = new StringBuilder();
+            for (String tag : selectedTags) {
+                tags.append("\'"+tag+"\',");
+            }
+            tags.deleteCharAt(tags.length()-1);
+            query.append(" AND nid IN (SELECT lt.nid FROM linktable lt WHERE lt.tid IN ("+tags.toString()+") GROUP BY lt.nid HAVING COUNT(*) >= "+selectedTags.size()+")");
+        }
+
         List<Note> noteList = db.noteDao().filterNotes(new SimpleSQLiteQuery(query.toString()));
         noteListAdapter.setNoteList(noteList);
     }
 
-    List<Note> commonValues(List<Note> list1, List<Note> list2) {
-        List<Note> ret = new ArrayList<>();
-        for (Note note1 : list1) {
-            for (Note note2 : list2) {
-                if (note1.nid == note2.nid) {
-                    ret.add(note1);
-                }
-            }
-        }
-        return ret;
-    }
-
-    public void clickedNote(int noteid) {
+    public void clickedNote(int noteID) {
         Log.w("Debugging", "Clicked Note");
+        TagList.clear();
         Intent intent = new Intent(SearchActivity.this, NoteActivity.class);
-        intent.putExtra("noteid", noteid);
+        intent.putExtra("noteID", noteID);
         startActivityForResult(intent, 100);
     }
 
@@ -177,6 +211,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == 100) {
             loadNoteList();
+            loadTagList();
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -200,5 +235,15 @@ public class SearchActivity extends AppCompatActivity {
             searchTerms = input.split(", ");
         }
         loadNoteList();
+    }
+
+    @Override
+    public void onBackPressed() {
+        exit();
+    }
+
+    void exit() {
+        TagList.clear();
+        finish();
     }
 }

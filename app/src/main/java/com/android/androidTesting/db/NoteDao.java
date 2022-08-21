@@ -28,6 +28,9 @@ public interface NoteDao {
     @Query("SELECT * FROM note WHERE description LIKE :searchTerm")
     List<Note> getNotesWithDescription(String searchTerm);
 
+//    @Query("SELECT * FROM note n WHERE n.nid IN (SELECT lt.nid FROM linktable lt WHERE lt.tid IN :filterValues)")
+//    List<Note> getNotesWithTag(List<String> filterValues);
+
     @RawQuery
     List<Note> filterNotes(SupportSQLiteQuery query);
 
