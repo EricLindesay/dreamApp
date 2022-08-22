@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -68,6 +69,8 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.MyViewHo
         AppDatabase db = AppDatabase.getDbInstance(context);
         final int occurrences = db.linkTableDao().tagOccurrences(thisTag.tid);
 
+        holder.usesText.setText("uses: "+occurrences);
+
         final DialogInterface.OnClickListener dialogClickListener = CreateDialogBox.create(() -> {addTagsActivity.deleteTag(thisTag); addTagsActivity.refreshTagList(); return null;}, () -> {return null;} );
         holder.deleteTag.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,12 +90,13 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.MyViewHo
     public class MyViewHolder extends RecyclerView.ViewHolder{
         CheckBox tagName;
         ImageView deleteTag;
+        TextView usesText;
 
         public MyViewHolder(View view) {
             super(view);
-            //this.setIsRecyclable(false);
             tagName = view.findViewById(R.id.checkBox);
             deleteTag = view.findViewById(R.id.deleteTag);
+            usesText = view.findViewById(R.id.usesText);
         }
     }
 }
