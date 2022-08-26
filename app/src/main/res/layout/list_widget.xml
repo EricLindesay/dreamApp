@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.RoomDbInJava.AppWidget.Container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darkModeBackground"
+    android:orientation="vertical"
+    android:theme="@style/AppTheme.AppWidgetContainer"
+    >
+
+    <TextView
+        android:id="@+id/dreamsHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dreams"
+        android:textColor="@color/darkModeText"
+        android:textSize="18dp"
+        />
+    <!---->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageView3"-->
+    <!--        android:layout_width="232dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:srcCompat="@android:drawable/ic_input_add" />-->
+
+    <!--    <include layout="@layout/widget_top" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageView2"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_weight="1" />-->
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/darkModeText"
+        android:textSize="12dp"
+        />
+    <!--        app:srcCompat="@android:drawable/ic_input_add" />-->
+
+</LinearLayout>

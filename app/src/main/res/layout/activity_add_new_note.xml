@@ -7,20 +7,20 @@
     android:background="@color/black"
     tools:context=".NoteActivity">
 
-
     <EditText
         android:id="@+id/descriptionInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:hint="Enter description"
         android:minHeight="48dp"
+        android:maxHeight="500dp"
 
-        android:textColorHint="@color/darkModeTextHint"
         android:textColor="@color/darkModeText"
+        android:textColorHint="@color/darkModeTextHint"
 
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateInput" />
 
