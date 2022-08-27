@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -42,15 +43,30 @@ public class MainActivity extends AppCompatActivity {
         addNewUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, NoteActivity.class);
-                intent.putExtra("noteID", -1);
-                startActivityForResult(intent, 100);
+                addNewNote();
             }
         });
 
         initRecyclerView();
         loadNoteList();
         Log.d("Eric", "User List loaded");
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            Log.d("Eric", "intent got "+intent.toString());
+            Uri intentData = intent.getData();
+            if (intentData != null) {
+                if (intentData.toString().equals("addNewNote")) {
+                    addNewNote();
+                }
+            }
+        }
+    }
+
+    private void addNewNote() {
+        Intent intent = new Intent(MainActivity.this, NoteActivity.class);
+        intent.putExtra("noteID", -1);
+        startActivityForResult(intent, 100);
     }
 
     private void initRecyclerView() {

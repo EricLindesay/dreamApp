@@ -1,5 +1,7 @@
 package com.android.androidTesting.widgets;
 
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -58,6 +60,7 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
 
         view.setTextViewText(R.id.tv1, date);
         view.setTextViewText(R.id.tv2, shortenDescription(description));
+
         return view;
     }
 
