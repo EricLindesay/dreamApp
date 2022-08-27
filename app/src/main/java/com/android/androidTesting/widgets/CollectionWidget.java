@@ -8,6 +8,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -20,7 +21,8 @@ import com.android.androidTesting.R;
 
 public class CollectionWidget extends AppWidgetProvider {
     public static final String EXTRA_ITEM = "com.android.androidTesting.widgets.EXTRA_ITEM";
-    public static final String TOAST_ACTION = "com.android.androidTesting.widgets.TOAST_ACTION";
+    public static final String CLICK_WIDGET_LIST_VIEW = "com.android.androidTesting.widgets.CLICK_WIDGET_LIST_VIEW";
+    public static final String REFRESH_WIDGET = "com.android.androidTesting.widgets.REFRESH_WIDGET";
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -44,7 +46,7 @@ public class CollectionWidget extends AppWidgetProvider {
 
             Intent intent = new Intent(context, WidgetService.class);
             Intent toastIntent = new Intent(context, CollectionWidget.class);
-            toastIntent.setAction(CollectionWidget.TOAST_ACTION);
+            toastIntent.setAction(CollectionWidget.CLICK_WIDGET_LIST_VIEW);
             toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
             PendingIntent toastPendingIntent = PendingIntent.getBroadcast(context, 0, toastIntent,
@@ -68,17 +70,16 @@ public class CollectionWidget extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.addDream, configPendingIntent);  // clicking the header takes you to main screen
 
         appWidgetManager.updateAppWidget(appWidgetIds, views);
-
     }
 
     @Override
     public void onEnabled(Context context) {
-        Toast.makeText(context,"onEnabled called", Toast.LENGTH_LONG).show();
+//        Toast.makeText(context,"onEnabled called", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onDisabled(Context context) {
-        Toast.makeText(context,"onDisabled called", Toast.LENGTH_LONG).show();
+//        Toast.makeText(context,"onDisabled called", Toast.LENGTH_LONG).show();
     }
 
     private static void setRemoteAdapter(Context context, @NonNull final RemoteViews views) {
@@ -89,7 +90,8 @@ public class CollectionWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-        if (intent.getAction().equals(TOAST_ACTION)) {
+        Log.d("RefreshWidget", "Received Broadcast");
+        if (intent.getAction().equals(CLICK_WIDGET_LIST_VIEW)) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
@@ -99,6 +101,18 @@ public class CollectionWidget extends AppWidgetProvider {
             newIntent.setData(Uri.parse("editNote:"+viewIndex));
             context.startActivity(newIntent);
         }
+        else if (intent.getAction().equals(REFRESH_WIDGET)) {
+            Log.d("RefreshWidget", "Refresh widget");
+            ComponentName cn = new ComponentName(context, CollectionWidget.class);
+            mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.listView);
+        }
         super.onReceive(context, intent);
     }
+
+    public static void sendRefreshBroadcast(Context context) {
+        Intent intent = new Intent(REFRESH_WIDGET);
+        intent.setComponent(new ComponentName(context, CollectionWidget.class));
+        context.sendBroadcast(intent);
+    }
+
 }

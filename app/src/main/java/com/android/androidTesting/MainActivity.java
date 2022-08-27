@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.android.androidTesting.adapters.NoteListAdapter;
 import com.android.androidTesting.db.AppDatabase;
 import com.android.androidTesting.db.Note;
+import com.android.androidTesting.widgets.CollectionWidget;
 
 import java.util.List;
 
@@ -46,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addNewNote();
+            }
+        });
+
+        ImageView backButton = findViewById(R.id.toolbarBack);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
@@ -107,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == 100) {
             loadNoteList();
+            Log.d("RefreshWidget", "Sent Broadcast");
+            CollectionWidget.sendRefreshBroadcast(context);
+//            notifyAll();
         }
 
         super.onActivityResult(requestCode, resultCode, data);

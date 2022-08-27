@@ -61,7 +61,7 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
         String description = noteListView.get(position).description;
 
         view.setTextViewText(R.id.tv1, date);
-        view.setTextViewText(R.id.tv2, shortenDescription(description));
+        view.setTextViewText(R.id.tv2, shortenDescription(description, 100));
 
         Bundle extras = new Bundle();
         extras.putInt(CollectionWidget.EXTRA_ITEM, position);
@@ -72,12 +72,24 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
         return view;
     }
 
-    String shortenDescription(String desc) {
-        int lenLimit = 100;
-        if (desc.length() > lenLimit) {
-            return desc.substring(0, lenLimit-3)+"...";
+    String shortenDescription(String desc, int charLimit) {
+        // Go through each word in the string, if adding the new word increases the length over the
+        // limit, then stop and add a "..." Otherwise just show the whole word.
+        // If the first word exceeds the character limit, then print "Word too long to display".
+        String ret = "";
+        String[] words = desc.split(" ");  // get each word.
+        for (String word : words) {
+            if (ret.length()+word.length() > charLimit) {
+                ret = ret.trim() + "...";
+            } else {
+                ret = ret + word + " ";
+            }
         }
-        return desc;
+        ret = ret.trim();
+        if (ret.isEmpty() || ret.equals("..."))
+            return "Character limit exceeded";
+
+        return ret;
     }
 
     @Override
