@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.androidTesting.adapters.NoteListAdapter;
 import com.android.androidTesting.db.AppDatabase;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("Eric", "starts main activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -53,12 +55,28 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null) {
-            Log.d("Eric", "intent got "+intent.toString());
+            Log.d("Eric", "in intent != null");
             Uri intentData = intent.getData();
+            Log.d("Eric", "after get data");
             if (intentData != null) {
+                Log.d("Eric", "in intentDATA != null");
                 if (intentData.toString().equals("addNewNote")) {
                     addNewNote();
                 }
+                else if (intentData.toString().contains("editNote")) {
+                    // split the intentData by : and find the number
+                    String[] sections = intentData.toString().split(":");
+                    int notePos = Integer.parseInt(sections[1]);
+                    Log.d("Eric", "clicked note "+notePos);
+                    // that number means it is the 10th note in the list, not note with ID 10.
+                    AppDatabase db = AppDatabase.getDbInstance(context);
+                    List<Note> allNotes = db.noteDao().getAllNotes();
+                    int noteID = allNotes.get(notePos).nid;
+                    Log.d("Eric", "which has ID "+noteID);
+                    clickedNote(noteID);
+                }
+            } else {
+                Log.d("Eric", "intentData is null");
             }
         }
     }
@@ -95,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickedNote(int noteID) {
-        Log.w("Debugging", "Clicked Note");
         Intent intent = new Intent(MainActivity.this, NoteActivity.class);
         intent.putExtra("noteID", noteID);
         startActivityForResult(intent, 100);

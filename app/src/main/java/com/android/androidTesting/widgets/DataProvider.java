@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.RemoteViews;
@@ -18,6 +19,7 @@ import static android.R.id.text2;
 import static android.R.layout.simple_list_item_2;
 //import android.R.layout.widget_row;
 
+import com.android.androidTesting.MainActivity;
 import com.android.androidTesting.R;
 import com.android.androidTesting.db.AppDatabase;
 import com.android.androidTesting.db.Note;
@@ -60,6 +62,12 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
 
         view.setTextViewText(R.id.tv1, date);
         view.setTextViewText(R.id.tv2, shortenDescription(description));
+
+        Bundle extras = new Bundle();
+        extras.putInt(CollectionWidget.EXTRA_ITEM, position);
+        Intent fillInIntent = new Intent();
+        fillInIntent.putExtras(extras);
+        view.setOnClickFillInIntent(R.id.widget_row, fillInIntent);
 
         return view;
     }
