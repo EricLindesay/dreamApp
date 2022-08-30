@@ -22,7 +22,7 @@ public interface TagDao {
     List<Tag> getTagsByName(String tagname);
 
     @Insert(onConflict=IGNORE)
-    void insertTag(Tag tag);
+    void insert(Tag tag);
 
     @Delete
     void delete(Tag tag);

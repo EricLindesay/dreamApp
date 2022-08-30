@@ -7,6 +7,7 @@ import java.util.concurrent.Callable;
 public class CreateDialogBox {
 
     public static DialogInterface.OnClickListener create(final Callable<Void> positiveResult, final Callable<Void> negativeResult) {
+        // create a dialog click listener, containing the positive and negative results
         final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

@@ -26,30 +26,31 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tagList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="1dp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchTag" />
+        app:layout_constraintStart_toEndOf="@id/searchTag"
+        app:layout_constraintTop_toBottomOf="@+id/addTag"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <TextView
         android:id="@+id/addTag"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:ems="10"
         android:hint="+ Add Tag"
         android:textColorHint="@color/darkModeTextHint"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/searchTag"
-        app:layout_constraintTop_toBottomOf="@+id/tagList" />
+        app:layout_constraintTop_toBottomOf="@+id/searchTag" />
 
     <include
         layout="@layout/toolbar"
         android:id="@+id/toolbar"
-        ></include>
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

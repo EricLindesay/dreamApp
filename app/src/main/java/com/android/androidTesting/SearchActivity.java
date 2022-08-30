@@ -16,29 +16,25 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.sqlite.db.SimpleSQLiteQuery;
-import androidx.sqlite.db.SupportSQLiteProgram;
-import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.android.androidTesting.adapters.NoteListAdapter;
 import com.android.androidTesting.adapters.TagList;
 import com.android.androidTesting.db.AppDatabase;
-import com.android.androidTesting.db.LinkTable;
 import com.android.androidTesting.db.Note;
 import com.android.androidTesting.db.Tag;
 import com.android.androidTesting.utility.CalendarClass;
-import com.android.androidTesting.utility.FormatNote;
+import com.android.androidTesting.utility.Format;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements ShowsNotes {
     EditText startDate, endDate, searchInput;
     NoteListAdapter noteListAdapter;
     long startDateLong = -1;
     long endDateLong = -1;
     String[] searchTerms = null;
-    TagList tagList = new TagList();
+    TagList tagList = TagList.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +48,26 @@ public class SearchActivity extends AppCompatActivity {
             // go into the tags menu so they can select tags to search for
             // only show notes for those tags
 
+        initialiseBackButton();
+        initialiseSearchInput();
+
+        startDate = findViewById(R.id.startDateInput);
+        initialiseDate(startDate, true);
+        endDate = findViewById(R.id.endDateInput);
+        initialiseDate(endDate, false);
+
+        initialiseClearDateButton(R.id.clearStartDate, startDate);
+        initialiseClearDateButton(R.id.clearEndDate, endDate);
+
+        initialiseTagButton();
+
+        initRecyclerView();
+        refreshData();
+        Log.d("Eric", "Search screen loaded");
+    }
+
+    void initialiseBackButton() {
+        // When the back button is pressed exit and return to the main screen
         ImageView backButton = findViewById(R.id.toolbarBack);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,72 +75,60 @@ public class SearchActivity extends AppCompatActivity {
                 exit();
             }
         });
+    }
 
+    void initialiseSearchInput() {
+        // When the user types something in the search bar, update the noteList and filter with the
+        // new term
         searchInput = findViewById(R.id.searchInput);
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchTermChanged(searchInput.getText().toString());
+                loadNoteList();
             }
 
             @Override public void afterTextChanged(Editable editable) {}
         });
+    }
 
-        startDate = findViewById(R.id.startDateInput);
-        startDate.setOnClickListener(new View.OnClickListener() {
+    void initialiseDate(EditText date, boolean isStartDate) {
+        // When the date EditText is clicked, pop up a calendar allowing the user to click a date.
+        // Also when the date is selected the text changes, calling a function to filter out
+        // the incorrect notes.
+        date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new CalendarClass(SearchActivity.this, startDate);
+                new CalendarClass(SearchActivity.this, date);
             }
         });
-        startDate.addTextChangedListener(new TextWatcher() {
+        date.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                startDateChanged(true);
+                loadNoteList();  // when the date is changed, update the list of notes
             }
 
             @Override public void afterTextChanged(Editable editable) {}
         });
+    }
 
-        endDate = findViewById(R.id.endDateInput);
-        endDate.setOnClickListener(new View.OnClickListener() {
+    void initialiseClearDateButton(int id, EditText date) {
+        // When the clear date button is selected, clear the appropriate date's text.
+        // Changing the text to blank then calls the date's onTextChanged function.
+        ImageView clearDate = findViewById(id);
+        clearDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new CalendarClass(SearchActivity.this, endDate);
+                date.setText("");
             }
         });
-        endDate.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+    }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                startDateChanged(false);
-            }
-
-            @Override public void afterTextChanged(Editable editable) {}
-        });
-
-        ImageView clearStartDate = findViewById(R.id.clearStartDate);
-        clearStartDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startDate.setText("");
-            }
-        });
-
-        ImageView clearEndDate = findViewById(R.id.clearEndDate);
-        clearEndDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                endDate.setText("");
-            }
-        });
-
-        loadTagList();
+    void initialiseTagButton() {
+        // WHen the tag button is pressed, open the tag list.
         Button tagButton = findViewById(R.id.tagsButton);
         tagButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,13 +136,10 @@ public class SearchActivity extends AppCompatActivity {
                 openTagList();
             }
         });
-
-        initRecyclerView();
-        loadNoteList();
-        Log.d("Eric", "Search screen loaded");
     }
 
     private void initRecyclerView() {
+        // Initialise the recyclerView, showing the notes as a list
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -146,104 +147,144 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
         noteListAdapter = new NoteListAdapter(this, this);
         recyclerView.setAdapter(noteListAdapter);
-
     }
 
     private void openTagList() {
+        // Opens the tag list activity
         Intent intent = new Intent(SearchActivity.this, TagsActivity.class);
         intent.putExtra("noteID", -1);
         startActivityForResult(intent, 100);
     }
 
     private void loadTagList() {
+        // Load the tag list with all of the tags
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
-        ArrayList<Tag> tags = new ArrayList<Tag>(db.tagDao().getAllTags());
+        ArrayList<Tag> tags = new ArrayList<>(db.tagDao().getAllTags());
         tagList.initialiseTagList(tags);
     }
 
-
     private void loadNoteList() {
+        // Load the correct notes.
+        // The notes have to be filtered a lot.
+        // Filter it by date, by description search term and by selected tags
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
-        StringBuilder query = new StringBuilder("SELECT * FROM note WHERE 1 == 1");
-        // filter for date
-        if (startDateLong == -1 && endDateLong == -1) {
-            // skip
-        }
-        else if (startDateLong != -1 && endDateLong == -1) {  // start date exists but end doesn't
-            query.append(" AND date >= "+startDateLong);
-        }
-        else {
-            query.append(" AND date BETWEEN "+startDateLong+" AND "+endDateLong);
-        }
+        StringBuilder query = new StringBuilder();
 
-        // filter for search terms
-        if (searchTerms != null) {
-            for (String term : searchTerms) {
-                // really should make sure the input is clean but idc
-                query.append(" AND description LIKE '%"+term+"%'");
-            }
-        }
-
-        // Filter tags
-        List<String> selectedTags = TagList.selectedTags();
-        if (!selectedTags.isEmpty()) {
-            StringBuilder tags = new StringBuilder();
-            for (String tag : selectedTags) {
-                tags.append("\'"+tag+"\',");
-            }
-            tags.deleteCharAt(tags.length()-1);
-            query.append(" AND nid IN (SELECT lt.nid FROM linktable lt WHERE lt.tid IN ("+tags.toString()+") GROUP BY lt.nid HAVING COUNT(*) >= "+selectedTags.size()+")");
-        }
+        query.append("SELECT * FROM note WHERE 1 == 1");
+        query.append(dateFilter());  // filter by date
+        query.append(searchFilter());  // filter by search term
+        query.append(tagFilter());  // filter by tags
+        query.append(" ORDER BY date DESC");
 
         List<Note> noteList = db.noteDao().filterNotes(new SimpleSQLiteQuery(query.toString()));
         noteListAdapter.setNoteList(noteList);
     }
 
-    public void clickedNote(int noteID) {
+    String dateFilter() {
+        // Filter dates
+        String ret = "";
+        startDateLong = dateToLong(startDate.getText().toString());  // convert the dates from text to long
+        endDateLong = dateToLong(endDate.getText().toString());
+
+        if (startDateLong == -1 && endDateLong == -1) {
+            // neither of the dates have any inputs, so don't filter for date
+        }
+        else if (startDateLong != -1 && endDateLong == -1) {  // start date exists but end doesn't
+            ret = " AND date >= "+startDateLong;
+        }
+        else {
+            // If the start date doesn't exist, startDateLong = -1, so we don't need to do another
+            // condition for it.
+            ret = " AND date BETWEEN "+startDateLong+" AND "+endDateLong;
+        }
+        return ret;
+    }
+
+    String searchFilter() {
+        // Filter for search terms
+        String ret = "";
+        String searchString = searchInput.getText().toString();
+
+        if (!searchString.isEmpty()) {
+            // Each term is split by "," and trimmed
+            for (String term : searchString.split(",")) {
+                // really should make sure the input is clean but idc
+                ret = " AND description LIKE '%"+term.trim()+"%'";
+            }
+        }
+        return ret;
+    }
+
+    String tagFilter() {
+        // Filter tags
+        String ret = "";
+        List<String> selectedTags = tagList.getSelected();  // tags to filter on
+
+        if (!selectedTags.isEmpty()) {
+            String tags = "\'"+String.join("\',\'", selectedTags)+"\'";  // a string in the form 'tag1','tag2','tag3'
+
+            // Select the notes in the linktable which have tags in the selectedTags list. This will
+            // give duplicate note ids since multiple tags can belong to the same note.
+            // So count how many of these duplicates there are and it should be equal to the number
+            // of tags that you are searching for.
+            ret = " AND nid IN (SELECT lt.nid FROM linktable lt WHERE lt.tid IN ("+tags+") GROUP BY lt.nid HAVING COUNT(*) >= "+selectedTags.size()+")";
+        }
+        return ret;
+    }
+
+    @Override
+    public void clickedNote(Note note) {
+        // When you click a note, go into 'edit note' mode.
+        int noteID = note.nid;
         Log.w("Debugging", "Clicked Note");
-        TagList.clear();
+        tagList.clear();
         Intent intent = new Intent(SearchActivity.this, NoteActivity.class);
         intent.putExtra("noteID", noteID);
         startActivityForResult(intent, 100);
     }
 
     @Override
+    public void deleteNote(Note note) {
+        // Remove the note from the database.
+        // Must remove all links to the note in the LinkTable.
+        // Then remove the note itself
+        // Then update the
+        AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
+        db.linkTableDao().deleteLinksToNote(note.nid);
+        db.noteDao().delete(note);
+        refreshData();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == 100) {
-            loadNoteList();
-            loadTagList();
+            // When the activity returns here, reload the note list and reload the tags
+            refreshData();
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    void startDateChanged(boolean start) {
-        if (start) {
-            if (startDate.getText().toString().isEmpty()) startDateLong = -1;
-            else startDateLong = FormatNote.formatDate(startDate.getText().toString());
-        } else {
-            if (endDate.getText().toString().isEmpty()) endDateLong = -1;
-            else endDateLong = FormatNote.formatDate(endDate.getText().toString());
-        }
+    void refreshData() {
         loadNoteList();
+        loadTagList();
     }
 
-    void searchTermChanged(String input) {
-        if (input.isEmpty()) {
-            searchTerms = null;
-        } else {
-            searchTerms = input.split(", ");
-        }
-        loadNoteList();
+    long dateToLong(String date) {
+        // Convert a date from string to long.
+        if (date.isEmpty()) return -1;
+        return Format.date(date);
     }
 
     @Override
     public void onBackPressed() {
+        // When the user presses the inbuilt back button, exit this activity and go back to main.
         exit();
     }
 
     void exit() {
-        TagList.clear();
+        // When you exit the activity, first clear the tag list, then finish the activity.
+        tagList.clear();
         finish();
     }
 }
