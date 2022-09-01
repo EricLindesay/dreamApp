@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -37,7 +36,7 @@ public class TagsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.select_tags_menu);
+        setContentView(R.layout.activity_tags);
 
         // You need to get the note so that you can see which tags have been selected (if you are
         // editing the note).
@@ -228,7 +227,7 @@ public class TagsActivity extends AppCompatActivity {
     void backPress() {
         // When you press one of the buttons to get back to the main menu this is called
         if (searchBar.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Tags saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Tags updated", Toast.LENGTH_SHORT).show();
             finish();
         } else {
             searchBar.setText("");  // empty the search bar.

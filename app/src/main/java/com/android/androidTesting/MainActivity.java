@@ -9,13 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.androidTesting.adapters.NoteListAdapter;
 import com.android.androidTesting.db.AppDatabase;
@@ -82,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements ShowsNotes {
                 startActivityForResult(intent, 100);
             }
         });
+
+//        searchButton.setColorFilter(null);
+//        searchButton.setColorFilter(context.getColor(R.color.darkModeText));
     }
 
     void initialiseBackButton() {

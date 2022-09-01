@@ -16,7 +16,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,7 +30,6 @@ import com.android.androidTesting.db.Tag;
 import com.android.androidTesting.utility.CalendarClass;
 import com.android.androidTesting.utility.CreateDialogBox;
 import com.android.androidTesting.utility.Format;
-import com.google.android.material.snackbar.Snackbar;
 
 public class NoteActivity extends AppCompatActivity {
     TextView dateInput;
@@ -47,7 +45,7 @@ public class NoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Set the display
-        setContentView(R.layout.activity_add_new_note);
+        setContentView(R.layout.activity_note);
 
         // Initialise the date and description text views
         dateInput = findViewById(R.id.dateInput);
@@ -94,7 +92,12 @@ public class NoteActivity extends AppCompatActivity {
         dateInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new CalendarClass(NoteActivity.this, dateInput);
+                if (noteID == -1) {
+                    new CalendarClass(NoteActivity.this, dateInput);
+                } else {
+                    String date = dateInput.getText().toString();
+                    new CalendarClass(NoteActivity.this, dateInput, date);
+                }
             }
         });
     }
