@@ -14,8 +14,9 @@
         android:layout_height="0dp"
 
         android:clickable="true"
-        app:layout_constraintBottom_toTopOf="@+id/addNewNoteButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/addNewNoteButton"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
@@ -25,11 +26,12 @@
         android:id="@+id/addNewNoteButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Note"
-        android:textSize="26dp"
+        android:text="New Dream"
         android:textAllCaps="false"
+        android:textSize="26dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <include
@@ -51,6 +53,22 @@
         app:tint="#FFFFFF"
         android:tintMode="src_in"
         />
+
+<!--    <TextView-->
+<!--        android:id="@+id/addNewNoteButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textColor="@color/darkModeText"-->
+<!--        android:text="+"-->
+<!--        android:textSize="46dp"-->
+<!--        android:translationZ="1dp"-->
+<!--        android:paddingLeft="15dp"-->
+<!--        android:paddingRight="15dp"-->
+<!--        android:paddingTop="10dp"-->
+<!--        android:paddingBottom="10dp"-->
+<!--        android:background="@color/darkModeBackground"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

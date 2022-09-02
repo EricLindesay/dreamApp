@@ -118,6 +118,7 @@ public class NoteActivity extends AppCompatActivity {
     void initialiseSaveButton() {
         // When pressed, save the note
         Button saveButton = findViewById(R.id.saveButton);
+//        ImageView saveButton = findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,6 +130,7 @@ public class NoteActivity extends AppCompatActivity {
     void initialiseTagButton() {
         // When pressed, open the tag list
         Button tagButton = findViewById(R.id.tagsButton);
+//        ImageView tagButton = findViewById(R.id.tagsButton);
         tagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

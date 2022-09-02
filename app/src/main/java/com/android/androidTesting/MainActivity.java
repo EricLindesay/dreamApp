@@ -16,8 +16,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.androidTesting.adapters.NoteListAdapter;
+import com.android.androidTesting.adapters.TagList;
 import com.android.androidTesting.db.AppDatabase;
 import com.android.androidTesting.db.Note;
 import com.android.androidTesting.widgets.CollectionWidget;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements ShowsNotes {
     void initialiseAddNewNoteButton() {
         // If the user clicks on the 'add new note' button, take them to the add note screen
         Button addNewUserButton = findViewById(R.id.addNewNoteButton);
+//        TextView addNewUserButton = findViewById(R.id.addNewNoteButton);
         addNewUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements ShowsNotes {
     void addNewNote() {
         // If the user wants to add a new note, send them to the note activity with the note ID -1
         // which signifies it is a new note.
+        TagList tagList = TagList.getInstance();
+        tagList.clear();
         Intent intent = new Intent(MainActivity.this, NoteActivity.class);
         intent.putExtra("noteID", -1);
         startActivityForResult(intent, 100);
@@ -171,6 +176,9 @@ public class MainActivity extends AppCompatActivity implements ShowsNotes {
     void editNoteThroughWidget(Uri intentData) {
         // The intent data is in the form "editNote:{number}"
         // So split the intentData by : and find the number
+        TagList tagList = TagList.getInstance();
+        tagList.clear();
+
         String[] sections = intentData.toString().split(":");
         int notePos = Integer.parseInt(sections[1]);
 

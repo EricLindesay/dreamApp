@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/darkModeBackground"
     tools:context=".NoteActivity">
 
     <EditText
@@ -35,18 +35,18 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="4dp"
+        android:layout_marginRight="10dp"
         android:layout_marginBottom="2dp"
         android:gravity="top"
         android:hint="Enter description"
+        android:inputType="textAutoCorrect|textMultiLine|textCapSentences"
         android:minHeight="48dp"
         android:textColor="@color/darkModeText"
-        android:textColorHint="@color/darkModeTextHint"
-        android:textCursorDrawable="@color/white"
         android:textColorHighlight="@color/lightGrey"
+        android:textColorHint="@color/darkModeTextHint"
 
-        android:inputType="textAutoCorrect|textMultiLine|textCapSentences"
+        android:textCursorDrawable="@color/white"
 
         app:flow_horizontalAlign="start"
         app:flow_verticalAlign="top"
@@ -54,6 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateInput" />
+<!--    app:layout_constraintBottom_toTopOf="@+id/tagsButton"-->
 
     <Button
         android:id="@+id/todayButton"
@@ -108,5 +109,13 @@
         app:layout_constraintTop_toTopOf="@+id/include"
         app:srcCompat="?attr/actionModeCopyDrawable"
         app:tint="@color/darkModeText" />
+
+<!--    <include-->
+<!--        android:layout="@layout/note_bottom"-->
+<!--        android:id="@+id/bottom_row"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
