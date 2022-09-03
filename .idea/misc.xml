@@ -4,22 +4,43 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.2029376498800959" />
+        <entry key="app/src/main/res/drawable-v21/app_widget_background.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable-v21/app_widget_inner_view_background.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable/ic_android_black_24dp.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.116" />
+        <entry key="app/src/main/res/drawable/main_image_background.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable/test_background.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable/test_foreground.xml" value="0.1985" />
         <entry key="app/src/main/res/layout/activity_add_new_note.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_note.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/activity_read_note.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_search.xml" value="0.33" />
         <entry key="app/src/main/res/layout/create_tag_row.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/list_widget.xml" value="0.33" />
         <entry key="app/src/main/res/layout/main_menu_row.xml" value="0.15" />
         <entry key="app/src/main/res/layout/main_screen_row.xml" value="0.17325227963525835" />
+        <entry key="app/src/main/res/layout/new_app_widget.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/note_bottom.xml" value="0.35520833333333335" />
         <entry key="app/src/main/res/layout/recycler_row.xml" value="0.25" />
         <entry key="app/src/main/res/layout/select_tags_menu.xml" value="0.18761726078799248" />
         <entry key="app/src/main/res/layout/tag_row.xml" value="0.33" />
         <entry key="app/src/main/res/layout/toolbar.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/widget_layout.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/widget_main.xml" value="0.42135922330097086" />
+        <entry key="app/src/main/res/layout/widget_row.xml" value="0.16203703703703703" />
+        <entry key="app/src/main/res/layout/widget_top.xml" value="0.25" />
         <entry key="app/src/main/res/menu/main_activity_actions.xml" value="0.1" />
         <entry key="app/src/main/res/menu/testing.xml" value="0.18" />
         <entry key="app/src/main/res/menu/tool_bar.xml" value="0.28888888888888886" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.19" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1985" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/main_image.xml" value="0.1985" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/test.xml" value="0.1985" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/test_round.xml" value="0.1985" />
+        <entry key="app/src/main/res/mipmap-xxxhdpi/main_image.xml" value="0.1985" />
+        <entry key="app/src/main/res/xml/home_screen_widget.xml" value="0.1" />
       </map>
     </option>
   </component>

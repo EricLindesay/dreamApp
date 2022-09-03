@@ -2,23 +2,41 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.androidTesting">
 
+<!--    android:roundIcon="@mipmap/ic_launcher_round"-->
+<!--    android:icon="@mipmap/ic_launcher"-->
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="Dreamer"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="Dream Keeper"
+        android:icon="@mipmap/main_image"
+        android:roundIcon="@mipmap/main_image"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.android.androidTesting.NoteActivity"></activity>
-        <activity android:name="com.android.androidTesting.TagsActivity"></activity>
-        <activity android:name="com.android.androidTesting.SearchActivity"></activity>
-        <activity android:name="com.android.androidTesting.MainActivity">
+        <activity android:name=".NoteActivity" />
+        <activity android:name=".TagsActivity" />
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".widgets.CollectionWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/new_app_widget_info" />
+        </receiver>
+
+        <service android:name=".widgets.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+
     </application>
 
 </manifest>

@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="5dp"
-        android:text="Dream Documentation"
+        android:text="Dreams"
         android:textColor="@color/darkModeText"
         android:textSize="28dp"
         android:textStyle="bold"

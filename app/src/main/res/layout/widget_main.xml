@@ -1,0 +1,52 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.RoomDbInJava.AppWidget.Container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:theme="@style/AppTheme.AppWidgetContainer"
+    android:id="@+id/widgetID"
+    >
+    <!--    android:background="@color/darkModeBackground"-->
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        >
+
+        <TextView
+            android:id="@+id/dreamsHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dreams"
+            android:textColor="@color/darkModeText"
+            android:textSize="18dp"
+            android:layout_column="0"
+            />
+
+        <TextView
+            android:id="@+id/addDream"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  +  "
+            android:scaleX="1.3"
+            android:scaleY="1.3"
+            android:textColor="@color/darkModeText"
+            android:textSize="18dp"
+            android:layout_column="2"
+            />
+    </GridLayout>
+<!--    <include-->
+<!--        layout="@layout/widget_top" />-->
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/darkModeText"
+        android:textSize="12dp"
+        />
+    <!--        app:srcCompat="@android:drawable/ic_input_add" />-->
+
+</LinearLayout>

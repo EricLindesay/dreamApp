@@ -30,9 +30,12 @@
         android:layout_height="50dp"
         android:ems="10"
         android:hint="Search..."
-        android:inputType="textPersonName"
         android:textColor="@color/darkModeText"
         android:textColorHint="@color/darkModeTextHint"
+        android:textCursorDrawable="@color/white"
+        android:textColorHighlight="@color/lightGrey"
+        android:inputType="textAutoCorrect|textMultiLine|textCapSentences"
+
         android:layout_marginLeft="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/startDateInput" />
@@ -51,6 +54,8 @@
         android:minHeight="48dp"
         android:textColor="@color/darkModeText"
         android:textColorHint="@color/darkModeTextHint"
+        android:textCursorDrawable="@color/white"
+        android:textColorHighlight="@color/lightGrey"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
@@ -68,6 +73,8 @@
         android:hint="Enter end date"
         android:minHeight="48dp"
         android:textColor="@color/darkModeText"
+        android:textCursorDrawable="@color/white"
+        android:textColorHighlight="@color/lightGrey"
 
         android:textColorHint="@color/darkModeTextHint"
         app:layout_constraintBottom_toBottomOf="@+id/startDateInput"

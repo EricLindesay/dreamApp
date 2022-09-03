@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,10 +37,10 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.MyViewHo
         this.addTagsActivity = addTagsActivity;
     }
 
-    public void setTagList(ArrayList<Tag> tagList) {
-        this.tagList = tagList;
-        //notifyDataSetChanged();
-    }
+//    public void setTagList(ArrayList<Tag> tagList) {
+//        this.tagList = tagList;
+//        notifyDataSetChanged();
+//    }
 
     @NonNull
     @Override
@@ -51,29 +52,48 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull TagListAdapter.MyViewHolder holder, int position) {
-        final Tag thisTag = this.tagList.get(position);
-        holder.tagName.setText(thisTag.tid);
+        // This is run for each row of the tag list.
+        final Tag tag = this.tagList.get(position);
+        holder.tagName.setText(tag.tid);
 
+        recordTagSelected(holder, tag);
+
+        // get occurrences of tag
+        int occurrences = getTagOccurrences(holder, tag);
+        holder.usesText.setText("uses: "+occurrences);
+
+        initDeleteTag(holder, tag, occurrences);
+    }
+
+    void recordTagSelected(MyViewHolder holder, Tag tag) {
+        // This allows the TagList to store which tags are selected or not.
+        // It also allows the default to be set. For example, if you load a note with tags 'one' and 'two'
+        // both of those tags will be checked because of this function.
         holder.tagName.setOnCheckedChangeListener(null);
-        holder.tagName.setChecked(allTags.isSelected(thisTag));
+        holder.tagName.setChecked(allTags.isSelected(tag));
         holder.tagName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //set your object's last status
-                allTags.setSelected(thisTag, isChecked);
+                allTags.setSelected(tag, isChecked);
             }
         });
+    }
 
-        // get occurrences of tag
+    int getTagOccurrences(MyViewHolder holder, Tag tag) {
+        // Displays how many times each note occurs.
         AppDatabase db = AppDatabase.getDbInstance(context);
-        final int occurrences = db.linkTableDao().tagOccurrences(thisTag.tid);
+        final int occurrences = db.linkTableDao().tagOccurrences(tag.tid);
+        return occurrences;
+    }
 
-        final DialogInterface.OnClickListener dialogClickListener = CreateDialogBox.create(() -> {addTagsActivity.deleteTag(thisTag); addTagsActivity.refreshTagList(); return null;}, () -> {return null;} );
+    void initDeleteTag(MyViewHolder holder, Tag tag, int occurrences) {
+        final DialogInterface.OnClickListener dialogClickListener = CreateDialogBox.create(() -> {addTagsActivity.deleteTag(tag); addTagsActivity.refreshTagList(); return null;}, () -> {return null;} );
         holder.deleteTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("Are you sure you want to delete \""+thisTag.tid+"\"?\nIt is used in "+occurrences+" notes").setPositiveButton("Yes", dialogClickListener)
+                builder.setMessage("Are you sure you want to delete \""+tag.tid+"\"?\nIt is used in "+occurrences+" notes").setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
             }
         });
@@ -87,12 +107,13 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.MyViewHo
     public class MyViewHolder extends RecyclerView.ViewHolder{
         CheckBox tagName;
         ImageView deleteTag;
+        TextView usesText;
 
         public MyViewHolder(View view) {
             super(view);
-            //this.setIsRecyclable(false);
             tagName = view.findViewById(R.id.checkBox);
             deleteTag = view.findViewById(R.id.deleteTag);
+            usesText = view.findViewById(R.id.usesText);
         }
     }
 }
