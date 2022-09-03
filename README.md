@@ -7,9 +7,9 @@ There is also a home screen widget which is very useful (promise).
 [apk](./app/release)  
 
 ## App Screenshots
-[mainScreen.png](./readmeImages/mainScreen.png)  
-[addNewNote.png](./readmeImages/addNewNote.png)  
-[editNote.png](./readmeImages/editNote.png)  
-[tagMenu.png](./readmeImages/tagMenu.png)  
-[searchMenu.png](./readmeImages/searchMenu.png)  
+![mainScreen.png](./readmeImages/mainScreen.png)  
+![addNewNote.png](./readmeImages/addNewNote.png)  
+![editNote.png](./readmeImages/editNote.png)  
+![tagMenu.png](./readmeImages/tagMenu.png)  
+![searchMenu.png](./readmeImages/searchMenu.png)  
 
