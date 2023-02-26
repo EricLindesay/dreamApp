@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements ShowsNotes {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("Eric", "Start main activity");
         super.onCreate(savedInstanceState);
 
         // Set the display
