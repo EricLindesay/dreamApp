@@ -1,7 +1,5 @@
 package com.android.androidTesting.adapters;
 
-import android.util.Log;
-
 import com.android.androidTesting.db.Tag;
 
 import java.util.ArrayList;

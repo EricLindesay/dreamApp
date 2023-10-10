@@ -9,10 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-
-import androidx.annotation.NonNull;
 
 import com.android.androidTesting.MainActivity;
 import com.android.androidTesting.R;
@@ -54,7 +53,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NoteListAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         // This runs for each row when it is created.
 
         // Get the note it should load

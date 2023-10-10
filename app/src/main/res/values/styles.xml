@@ -5,6 +5,8 @@
         <item name="colorPrimary">@color/darkModeBackground</item>
         <item name="colorPrimaryDark">@color/darkModeBackground</item>
         <item name="colorAccent">@color/cursorColour</item>
+        <item name="android:windowBackground">@color/darkModeBackground</item>
+
     </style>
 
     <style name="Widget.RoomDbInJava.AppWidget.Container" parent="android:Widget">
@@ -21,5 +23,4 @@
 <!--        <item name="android:textColor">?android:attr/textColorPrimary</item>-->
         <item name="android:textColor">@color/darkModeBackground</item>
     </style>
-
 </resources>

@@ -1,14 +1,5 @@
 package com.android.androidTesting;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -22,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.androidTesting.adapters.TagList;
 import com.android.androidTesting.db.AppDatabase;
 import com.android.androidTesting.db.LinkTable;
@@ -30,6 +23,13 @@ import com.android.androidTesting.db.Tag;
 import com.android.androidTesting.utility.CalendarClass;
 import com.android.androidTesting.utility.CreateDialogBox;
 import com.android.androidTesting.utility.Format;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
     TextView dateInput;

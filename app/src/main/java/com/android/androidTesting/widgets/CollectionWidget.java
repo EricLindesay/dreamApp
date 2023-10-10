@@ -5,12 +5,13 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
-import androidx.annotation.NonNull;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.android.androidTesting.MainActivity;
 import com.android.androidTesting.NoteActivity;
@@ -38,8 +39,12 @@ public class CollectionWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Log.d("Widget", "On Update");
+//        Toast.makeText(context,"onUpdate called", Toast.LENGTH_LONG).show();
+
         RemoteViews views = null;
         for (int appWidgetId : appWidgetIds) {
+            Log.d("Widget", "App Widget ID "+appWidgetId);
 //            updateAppWidget(context, appWidgetManager, appWidgetId);
             views = new RemoteViews(context.getPackageName(), R.layout.widget_main);
             setRemoteAdapter(context, views);
@@ -50,10 +55,15 @@ public class CollectionWidget extends AppWidgetProvider {
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
 //        updateAppWidget(context, appWidgetManager, appWidgetIds);
+
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
+        Log.d("Widget", "widget header click");
         clickWidgetHeader(context, views);
+        Log.d("Widget", "add new click");
         clickWidgetAddNew(context, views);
+
+        Log.d("Widget", "before updatea pp widget");
 
         appWidgetManager.updateAppWidget(appWidgetIds, views);
     }
@@ -66,7 +76,7 @@ public class CollectionWidget extends AppWidgetProvider {
         toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
         PendingIntent toastPendingIntent = PendingIntent.getBroadcast(context, 0, toastIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         views.setPendingIntentTemplate(R.id.listView, toastPendingIntent);
     }
 
@@ -74,17 +84,18 @@ public class CollectionWidget extends AppWidgetProvider {
         // When you click on an empty part of the widget or on the header, take you to the main
         // screen
         Intent configIntent = new Intent(context, MainActivity.class);
-        PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, 0);
+        PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, PendingIntent.FLAG_IMMUTABLE);
         views.setOnClickPendingIntent(R.id.dreamsHeader, configPendingIntent);  // clicking the header takes you to main screen
         views.setOnClickPendingIntent(R.id.widgetID, configPendingIntent);  // clicking somewhere undefined takes you to main screen
     }
 
     void clickWidgetAddNew(Context context, RemoteViews views) {
         // When you click the "+" button on the widget, go to the add new note screen.
+        Log.d("Widget", "Add new note pending intent");
         Intent configIntent = new Intent(context, MainActivity.class);
         configIntent.setData(Uri.parse("addNewNote"));
-        PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, 0);
-        configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, 0);
+        PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, PendingIntent.FLAG_MUTABLE);
+        configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, PendingIntent.FLAG_MUTABLE);
         views.setOnClickPendingIntent(R.id.addDream, configPendingIntent);  // clicking the header takes you to main screen
     }
 
@@ -97,11 +108,13 @@ public class CollectionWidget extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
+        Log.d("Widget", "On Enabled");
 //        Toast.makeText(context,"onEnabled called", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onDisabled(Context context) {
+        Log.d("Widget", "On Disabled");
 //        Toast.makeText(context,"onDisabled called", Toast.LENGTH_LONG).show();
     }
 
@@ -112,7 +125,8 @@ public class CollectionWidget extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("RefreshWidget", "Received Broadcast");
+//        Toast.makeText(context,"Refresh Widget", Toast.LENGTH_LONG).show();
+        Log.d("Widget", "Received Broadcast");
         if (intent.getAction().equals(CLICK_WIDGET_LIST_VIEW)) {
             receiveClickListView(context, intent);
         }
@@ -124,7 +138,10 @@ public class CollectionWidget extends AppWidgetProvider {
 
     void receiveClickListView(Context context, Intent intent) {
         // Start an activity, loading the clicked list view on the app.
-        int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
+        Log.d("Widget", "Intent: "+intent.getExtras());
+        Log.d("Widget", "Intent: "+intent.getIntExtra(CollectionWidget.EXTRA_ITEM, -1));
+        int viewIndex = intent.getIntExtra(CollectionWidget.EXTRA_ITEM, -1);
+        Log.d("Widget", "View index: "+viewIndex);
         Intent newIntent = new Intent(context, MainActivity.class);
         newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         newIntent.setData(Uri.parse("editNote:"+viewIndex));

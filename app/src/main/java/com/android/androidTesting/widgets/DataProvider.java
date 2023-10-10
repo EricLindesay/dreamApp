@@ -1,20 +1,20 @@
 package com.android.androidTesting.widgets;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
-
-import java.util.ArrayList;
-import java.util.List;
-
-//import android.R.layout.widget_row;
 
 import com.android.androidTesting.R;
 import com.android.androidTesting.db.AppDatabase;
 import com.android.androidTesting.db.Note;
 import com.android.androidTesting.utility.Format;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
 
@@ -45,6 +45,7 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int position) {
+        Log.d("Widget", "Get view At ("+position+")");
         RemoteViews view = new RemoteViews(mContext.getPackageName(),
                 R.layout.widget_row);
 
@@ -56,10 +57,14 @@ public class DataProvider implements RemoteViewsService.RemoteViewsFactory {
         view.setTextViewText(R.id.tv2, Format.shortenString(description, 100));
 
         // When you click on the widget list, create an intent to tell it the note's position id.
-        Bundle extras = new Bundle();
-        extras.putInt(CollectionWidget.EXTRA_ITEM, position);
+//        Bundle extras = new Bundle();
+//        extras.putInt(CollectionWidget.EXTRA_ITEM, position);
         Intent fillInIntent = new Intent();
-        fillInIntent.putExtras(extras);
+//        fillInIntent.putExtras(extras);
+        fillInIntent.putExtra(CollectionWidget.EXTRA_ITEM, position);
+
+
+        Log.d("DataProvider", "Position in intent "+fillInIntent.getIntExtra(CollectionWidget.EXTRA_ITEM, -1));
         view.setOnClickFillInIntent(R.id.widget_row, fillInIntent);
 
         return view;

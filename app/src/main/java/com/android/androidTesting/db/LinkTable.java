@@ -3,7 +3,6 @@ package com.android.androidTesting.db;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 @Entity(primaryKeys = {"nid","tid"})
 public class LinkTable {

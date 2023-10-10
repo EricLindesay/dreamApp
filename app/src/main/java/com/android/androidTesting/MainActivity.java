@@ -1,22 +1,19 @@
 package com.android.androidTesting;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.androidTesting.adapters.NoteListAdapter;
 import com.android.androidTesting.adapters.TagList;
@@ -32,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements ShowsNotes {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("This is on create\n");
         super.onCreate(savedInstanceState);
 
         // Set the display

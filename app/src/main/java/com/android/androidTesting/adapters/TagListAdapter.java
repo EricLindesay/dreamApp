@@ -11,12 +11,11 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import androidx.annotation.NonNull;
-
-import com.android.androidTesting.TagsActivity;
 import com.android.androidTesting.R;
+import com.android.androidTesting.TagsActivity;
 import com.android.androidTesting.db.AppDatabase;
 import com.android.androidTesting.db.Tag;
 import com.android.androidTesting.utility.CreateDialogBox;
@@ -51,7 +50,7 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TagListAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         // This is run for each row of the tag list.
         final Tag tag = this.tagList.get(position);
         holder.tagName.setText(tag.tid);

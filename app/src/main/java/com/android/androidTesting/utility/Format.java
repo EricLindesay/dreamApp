@@ -4,8 +4,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.IllegalFormatWidthException;
-import java.util.List;
 
 public class Format {
     public static String description(String description) {
