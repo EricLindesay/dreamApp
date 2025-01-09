@@ -44,5 +44,5 @@ The inspiration for Dream Keeper stemmed from the limitations encountered with e
 
 ## Contributing
 Contributions are welcome! Feel free to submit issues and pull requests to enhance the functionality and features of Dream Keeper.
-Note that this is an app tailored for me so issues may go unresolved. But I'm happy for you to fork the repository or submit a pull request adding it yourself.
+Note that this is an app tailored for me so issues may go unresolved. But I'm happy for you to fork the repository or submit a pull request: adding it yourself.
 
