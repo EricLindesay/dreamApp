@@ -1,6 +1,6 @@
 # Dream Keeper
 
-Dream Keeper is an Android application designed for personalized dream journaling. It allows users to record dreams with customizable features, including dates, descriptions, and tags. The app also offers a home screen widget for quick access.
+Dream Keeper is an Android application designed for personalized dream journalling. It allows users to record dreams with customizable features, including dates, descriptions, and tags. The app also offers a home screen widget for quick access.
 
 ## Features
 - **Dream Entry**: Create dreams with specific dates, detailed descriptions, and a list of associated tags.
@@ -10,7 +10,7 @@ Dream Keeper is an Android application designed for personalized dream journalin
 
 ## Motivation
 
-The inspiration for Dream Keeper stemmed from the limitations encountered with existing note-taking applications. Notably, the inability to search by multiple tags simultaneously and the lack of customizable sorting options in apps like Google Keep Notes. To overcome these challenges, Dream Keeper was developed to provide a tailored solution for dream journaling enthusiasts.
+The inspiration for Dream Keeper stemmed from the limitations encountered with existing note-taking applications. Notably, the inability to search by multiple tags simultaneously and the lack of customizable sorting options in apps like Google Keep Notes. To overcome these challenges, Dream Keeper was developed to provide a tailored solution for dream journalling enthusiasts.
 
 ## Installation
 
@@ -29,7 +29,7 @@ The inspiration for Dream Keeper stemmed from the limitations encountered with e
 3. **Build the project**:
     Allow Android Studio to build the project and resolve any dependencies.
 4. **Run on Device/Emulator**:
-    Deploy the app to you Android device or emulator to start using it.
+    Deploy the app to your Android device or emulator to start using it.
 
 ## Usage
 - **Adding a dream**: Use the 'Add Dream' button and input the date, description and tags for your dream.
